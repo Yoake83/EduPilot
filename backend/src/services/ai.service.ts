@@ -13,6 +13,11 @@ function buildPrompt(data: GenerationJobData): string {
   const totalMarks = data.questionTypes.reduce((s, qt) => s + qt.count * qt.marks, 0);
   const totalQuestions = data.questionTypes.reduce((s, qt) => s + qt.count, 0);
 
+  // If PDF content was uploaded, instruct Groq to use it as source material
+  const fileSection = data.fileContent
+    ? `\nSOURCE MATERIAL (generate questions strictly based on this content):\n"""\n${data.fileContent.slice(0, 6000)}\n"""\n`
+    : '';
+
   return `You are an expert teacher creating an exam question paper.
 
 Create a structured question paper for:
@@ -20,7 +25,7 @@ Create a structured question paper for:
 - Grade/Class: ${data.grade}
 - Title: ${data.title}
 ${data.additionalInstructions ? `- Special instructions: ${data.additionalInstructions}` : ''}
-
+${fileSection}
 Question types required:
 ${qtList}
 
@@ -32,6 +37,7 @@ Rules:
 3. Include a short answer key for each question
 4. Questions must be appropriate for grade ${data.grade}
 5. Each section must have a clear instruction line
+${data.fileContent ? '6. Questions MUST be based on the source material provided above. Do not invent topics outside it.' : ''}
 
 You MUST respond with ONLY valid JSON. No markdown, no code fences, no explanation. Just raw JSON like this:
 {
@@ -113,7 +119,7 @@ export async function generatePaper(data: GenerationJobData): Promise<GeneratedP
     ],
     temperature: 0.7,
     max_tokens: 4096,
-    response_format: { type: 'json_object' }, // forces pure JSON output
+    response_format: { type: 'json_object' },
   });
 
   const raw = response.choices[0].message.content || '';

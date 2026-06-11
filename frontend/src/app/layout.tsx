@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Sidebar from '@/components/Sidebar';
+import { ConditionalSidebar } from '@/components/ConditionalSidebar';
+import { AuthProvider } from '@/components/AuthProvider';
 
 export const metadata: Metadata = {
-  title: 'VedaAI',
-  description: 'AI Assessment Creator',
+  title: 'EduPilot',
+  description: 'AI-Powered Educational Platform',
 };
 
 export default function RootLayout({
@@ -21,17 +22,14 @@ export default function RootLayout({
           background: '#F3F3F3',
         }}
       >
-        <div className="flex h-screen overflow-hidden">
-          
-          {/* Hide sidebar on mobile */}
-          <div className="hidden md:block">
-            <Sidebar />
+        <AuthProvider>
+          <div className="flex h-screen overflow-hidden">
+            <ConditionalSidebar />
+            <main className="flex-1 overflow-auto">
+              {children}
+            </main>
           </div>
-
-          <main className="flex-1 overflow-auto">
-            {children}
-          </main>
-        </div>
+        </AuthProvider>
       </body>
     </html>
   );

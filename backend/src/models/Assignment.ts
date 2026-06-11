@@ -9,9 +9,11 @@ export interface AssignmentDoc extends Document {
   questionTypes: QuestionTypeConfig[];
   additionalInstructions?: string;
   filePath?: string;
+  groupId?: mongoose.Types.ObjectId;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   jobId?: string;
   result?: GeneratedPaper;
+  createdBy: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,6 +33,7 @@ const AssignmentSchema = new Schema(
     questionTypes: { type: [QuestionTypeSchema], required: true },
     additionalInstructions: { type: String },
     filePath: { type: String },
+    groupId: { type: Schema.Types.ObjectId, ref: 'Group' },
     status: {
       type: String,
       enum: ['pending', 'processing', 'completed', 'failed'],
@@ -38,8 +41,13 @@ const AssignmentSchema = new Schema(
     },
     jobId: { type: String },
     result: { type: Schema.Types.Mixed },
+    createdBy: { type: String, required: true, default: 'unknown' },
   },
   { timestamps: true }
 );
 
+AssignmentSchema.index({ groupId: 1 });
+AssignmentSchema.index({ createdBy: 1 });
+
+// Named export — keeps all existing imports working
 export const AssignmentModel = mongoose.model<AssignmentDoc>('Assignment', AssignmentSchema);

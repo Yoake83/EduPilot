@@ -3,7 +3,9 @@
 import { useEffect, useRef } from 'react';
 import { useAssignmentStore } from '@/store/assignmentStore';
 
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:4000';
+const WS_URL =
+  process.env.NEXT_PUBLIC_WS_URL ||
+  'wss://edupilot-dmy4.onrender.com';
 
 export function useAssignmentWebSocket(assignmentId: string | null) {
   const wsRef = useRef<WebSocket | null>(null);
