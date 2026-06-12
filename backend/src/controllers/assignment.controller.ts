@@ -3,6 +3,7 @@ import { AssignmentModel } from '../models/Assignment';
 import { GroupModel } from '../models/Group';
 import { generationQueue } from '../queues/generation.queue';
 import { redis } from '../services/redis';
+import { notifyGroupStudents } from '../services/notification.service';
 import fs from 'fs/promises';
 
 async function extractFileText(filePath?: string): Promise<string | undefined> {
@@ -12,9 +13,7 @@ async function extractFileText(filePath?: string): Promise<string | undefined> {
     const buffer = await fs.readFile(filePath);
     const data = await pdfParse(buffer);
     return data.text;
-  } catch {
-    return undefined;
-  }
+  } catch { return undefined; }
 }
 
 export async function createAssignment(req: Request, res: Response) {
@@ -26,27 +25,20 @@ export async function createAssignment(req: Request, res: Response) {
     }
 
     const parsedQT = typeof questionTypes === 'string' ? JSON.parse(questionTypes) : questionTypes;
-
     for (const qt of parsedQT) {
       if (!qt.type || qt.count < 1 || qt.marks < 1) {
         return res.status(400).json({ error: 'Invalid question type configuration' });
       }
     }
 
-    // If groupId provided, verify teacher owns this group
+    let group = null;
     if (groupId) {
-      const group = await GroupModel.findById(groupId);
+      group = await GroupModel.findById(groupId);
       if (!group) return res.status(404).json({ error: 'Group not found' });
 
       const teacherIdStr = group.teacherId.toString();
       const userIdStr = req.user!.userId.toString();
 
-      console.log('[assignment] groupId:', groupId);
-      console.log('[assignment] group.teacherId:', teacherIdStr);
-      console.log('[assignment] req.user.userId:', userIdStr);
-      console.log('[assignment] match:', teacherIdStr === userIdStr);
-
-      // Allow if teacher owns it OR if admin
       if (teacherIdStr !== userIdStr && req.user!.role !== 'admin') {
         return res.status(403).json({ error: 'You do not own this group' });
       }
@@ -75,12 +67,17 @@ export async function createAssignment(req: Request, res: Response) {
     });
 
     await AssignmentModel.findByIdAndUpdate(assignment._id, { jobId: job.id });
+    await redis.setex(`job:${job.id}`, 3600, JSON.stringify({ assignmentId: assignment._id.toString(), status: 'waiting' }));
 
-    await redis.setex(
-      `job:${job.id}`,
-      3600,
-      JSON.stringify({ assignmentId: assignment._id.toString(), status: 'waiting' })
-    );
+    // Notify all students in the group
+    if (group && group.students.length > 0) {
+      await notifyGroupStudents(group.students, {
+        type: 'new_assignment',
+        title: '📄 New Assignment',
+        message: `${title} has been posted in ${group.name}`,
+        link: `/assignments/${assignment._id}`,
+      });
+    }
 
     res.status(201).json({ assignment: { ...assignment.toObject(), jobId: job.id } });
   } catch (err) {
@@ -115,8 +112,7 @@ export async function getAssignments(req: Request, res: Response) {
 }
 
 export async function getAssignment(req: Request, res: Response) {
-  const assignment = await AssignmentModel.findById(req.params.id)
-    .populate('groupId', 'name subject');
+  const assignment = await AssignmentModel.findById(req.params.id).populate('groupId', 'name subject');
   if (!assignment) return res.status(404).json({ error: 'Not found' });
   res.json({ assignment });
 }

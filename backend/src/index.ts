@@ -10,6 +10,8 @@ import authRoutes from './routes/auth';
 import quizRoutes from './routes/quiz';
 import submissionRoutes from './routes/submissions';
 import groupRoutes from './routes/groups';
+import notificationRoutes from './routes/notifications';
+import postRoutes from './routes/posts';
 
 const app = express();
 const server = http.createServer(app);
@@ -24,6 +26,8 @@ app.use('/api/generation', generationRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/groups', groupRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/groups/:groupId/posts', postRoutes);
 
 app.get('/health', (_, res) => res.json({ status: 'ok' }));
 

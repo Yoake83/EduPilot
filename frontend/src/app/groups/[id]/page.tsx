@@ -123,7 +123,9 @@ export default function GroupDetailPage() {
             </button>
           ))}
         </div>
-
+<Link href={`/groups/${id}/forum`} style={{ padding: '7px 14px', background: '#F5F0E8', color: '#0A4A3C', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>
+  💬 Discussion
+</Link>
         {/* Assignments tab */}
         {tab === 'assignments' && (
           assignments.length === 0 ? (

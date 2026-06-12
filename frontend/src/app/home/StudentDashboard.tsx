@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { authHeaders } from '@/hooks/useApi';
+import { Topbar } from '@/components/Topbar';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -37,17 +38,13 @@ export default function StudentDashboard() {
 
   return (
     <div style={{ ...s, background: '#F5F0E8', minHeight: '100vh' }}>
-      <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E5E0D5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
-        <span style={{ fontSize: 13, color: '#9CA3AF' }}>Dashboard</span>
-        <Link href="/groups/join" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 16px', background: '#0A4A3C', color: '#F2B759', borderRadius: 999, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>
-          + Join a Class
-        </Link>
-      </div>
+      <Topbar title="Dashboard" action={{ label: '+ Join a Class', href: '/groups/join' }} />
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '28px 24px' }}>
         <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0A4A3C', margin: '0 0 4px' }}>Welcome, {user?.name?.split(' ')[0]} 👋</h1>
         <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 24px' }}>Here are your classes and upcoming assignments.</p>
 
+        {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
           {[
             { label: 'Enrolled Classes', value: groups.length, sub: 'active groups' },
@@ -62,6 +59,7 @@ export default function StudentDashboard() {
           ))}
         </div>
 
+        {/* My Classes */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <h2 style={{ fontSize: 15, fontWeight: 700, color: '#111', margin: 0 }}>My Classes</h2>
@@ -91,6 +89,7 @@ export default function StudentDashboard() {
             )}
         </div>
 
+        {/* Assignments */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <h2 style={{ fontSize: 15, fontWeight: 700, color: '#111', margin: 0 }}>Assignments</h2>
