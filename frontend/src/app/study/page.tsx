@@ -297,7 +297,7 @@ export default function StudyPage() {
                       </div>
                     )}
                     <div style={{
-                      maxWidth: '75%', padding: '10px 14px', borderRadius: 12,
+                      maxWidth: '75%', padding: '10px 14px', 
                       background: msg.role === 'user' ? '#0A4A3C' : '#fff',
                       color: msg.role === 'user' ? '#F2B759' : '#111',
                       border: msg.role === 'assistant' ? '0.5px solid #E5E0D5' : 'none',
