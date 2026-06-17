@@ -15,6 +15,7 @@ interface Material {
   subject?: string;
   uploaderName: string;
   uploaderRole: string;
+ uploadedBy?: string;
   totalChunks: number;
   groupId?: string;
   createdAt: string;
