@@ -1,9 +1,11 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
 import { useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAssignmentStore } from '@/store/assignmentStore';
 import { authHeaders } from '@/hooks/useApi';
+
 import clsx from 'clsx';
 
 const QUESTION_TYPE_OPTIONS = [
