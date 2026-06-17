@@ -1,7 +1,7 @@
 'use client';
 
 export const dynamic = 'force-dynamic';
-import { useState, useRef } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAssignmentStore } from '@/store/assignmentStore';
 import { authHeaders } from '@/hooks/useApi';
@@ -21,10 +21,11 @@ const QUESTION_TYPE_OPTIONS = [
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
-export default function CreateAssignmentPage() {
+// ✅ Isolated into its own component so useSearchParams is inside a Suspense boundary
+function CreateAssignmentForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const groupId = searchParams.get('groupId'); // pre-select group if coming from group page
+  const groupId = searchParams.get('groupId');
 
   const { form, setForm, addQuestionType, removeQuestionType, updateQuestionType, resetForm, setCurrentAssignment } =
     useAssignmentStore();
@@ -64,9 +65,7 @@ export default function CreateAssignmentPage() {
       if (form.file) fd.append('file', form.file);
       if (groupId) fd.append('groupId', groupId);
 
-      // ✅ Auth token added here
       const headers = authHeaders() as Record<string, string>;
-      // Don't set Content-Type — browser sets it automatically with boundary for FormData
       const res = await fetch(`${API}/api/assignments`, {
         method: 'POST',
         headers,
@@ -280,5 +279,14 @@ export default function CreateAssignmentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// ✅ Default export wraps the form in Suspense to satisfy Next.js requirement
+export default function CreateAssignmentPage() {
+  return (
+    <Suspense fallback={<div className="min-h-full bg-[#F5F0E8] flex items-center justify-center text-sm text-[#9CA3AF]">Loading...</div>}>
+      <CreateAssignmentForm />
+    </Suspense>
   );
 }
