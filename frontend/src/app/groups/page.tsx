@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { authHeaders } from '@/hooks/useApi';
+import { Topbar } from '@/components/Topbar';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -34,14 +35,13 @@ export default function GroupsPage() {
 
   return (
     <div style={{ ...s, background: '#F5F0E8', minHeight: '100vh' }}>
-      <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E5E0D5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
-        <span style={{ fontSize: 13, color: '#9CA3AF' }}>My Groups</span>
-        {isTeacher ? (
-          <Link href="/groups/create" style={{ padding: '7px 16px', background: '#0A4A3C', color: '#F2B759', borderRadius: 999, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>+ Create Group</Link>
-        ) : (
-          <Link href="/groups/join" style={{ padding: '7px 16px', background: '#0A4A3C', color: '#F2B759', borderRadius: 999, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>+ Join Class</Link>
-        )}
-      </div>
+      <Topbar
+        title={isTeacher ? 'My Classes' : 'Enrolled Classes'}
+        action={{
+          label: isTeacher ? '+ Create Group' : '+ Join Class',
+          href: isTeacher ? '/groups/create' : '/groups/join',
+        }}
+      />
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '28px 24px' }}>
         <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0A4A3C', margin: '0 0 4px' }}>

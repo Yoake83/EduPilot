@@ -23,6 +23,8 @@ export default function Sidebar() {
     { href: '/assignments', label: isTeacher ? 'Assignments' : 'Assignments', icon: AssignmentsIcon, show: true },
     { href: '/toolkit', label: "AI Teacher's Toolkit", icon: ToolkitIcon, show: isTeacher },
     { href: '/library', label: 'My Library', icon: LibraryIcon, show: true },
+  { href: '/study', label: 'Study Assistant', icon: StudyIcon, show: true },
+  { href: '/analytics', label: 'Analytics', icon: AnalyticsIcon, show: true },
   ].filter(item => item.show);
 
   const ctaLink = isTeacher ? '/assignments/create' : '/groups/join';
@@ -189,4 +191,14 @@ function LibraryIcon({ active }: { active: boolean }) {
 function SettingsIcon({ active }: { active: boolean }) {
   const c = active ? '#F2B759' : 'rgba(255,255,255,0.4)';
   return <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}><circle cx="8" cy="8" r="2" stroke={c} strokeWidth="1.4"/><path d="M8 1.5V3M8 13V14.5M1.5 8H3M13 8H14.5M3.1 3.1L4.2 4.2M11.8 11.8L12.9 12.9M3.1 12.9L4.2 11.8M11.8 4.2L12.9 3.1" stroke={c} strokeWidth="1.4" strokeLinecap="round"/></svg>;
+}
+
+function AnalyticsIcon({ active }: { active: boolean }) {
+  const c = active ? '#F2B759' : 'rgba(255,255,255,0.4)';
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}><path d="M2 12L5.5 8L8.5 10L12 5L14 7" stroke={c} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/><path d="M2 14H14" stroke={c} strokeWidth="1.4" strokeLinecap="round"/></svg>;
+}
+
+function StudyIcon({ active }: { active: boolean }) {
+  const c = active ? '#F2B759' : 'rgba(255,255,255,0.4)';
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}><path d="M8 2L14 5V11L8 14L2 11V5L8 2Z" stroke={c} strokeWidth="1.4" strokeLinejoin="round"/><path d="M8 2V14M2 5L8 8L14 5" stroke={c} strokeWidth="1.4" strokeLinecap="round"/></svg>;
 }

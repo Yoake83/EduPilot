@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Topbar } from '@/components/Topbar';
 
 type QuizQuestionType = 'mcq' | 'true_false' | 'fill_blank';
 type QuizStatus = 'idle' | 'generating' | 'done' | 'error';
@@ -138,10 +139,7 @@ export default function ToolkitPage() {
 
   return (
     <div style={{ background: '#F5F0E8', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
-      {/* Topbar */}
-      <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E5E0D5', display: 'flex', alignItems: 'center', padding: '0 24px' }}>
-        <span style={{ fontSize: 13, color: '#9CA3AF' }}>AI Teacher&apos;s Toolkit</span>
-      </div>
+      <Topbar title="AI Teacher's Toolkit" />
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
         <h1 style={{ fontSize: 22, fontWeight: 700, color: '#0A4A3C', margin: '0 0 4px' }}>AI Quiz Generator</h1>

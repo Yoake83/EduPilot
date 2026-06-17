@@ -12,6 +12,9 @@ import submissionRoutes from './routes/submissions';
 import groupRoutes from './routes/groups';
 import notificationRoutes from './routes/notifications';
 import postRoutes from './routes/posts';
+import analyticsRoutes from './routes/analytics';
+import evaluatorRoutes from './routes/evaluator';
+import studyRoutes from './routes/study';
 
 const app = express();
 const server = http.createServer(app);
@@ -28,6 +31,9 @@ app.use('/api/submissions', submissionRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/groups/:groupId/posts', postRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/evaluate', evaluatorRoutes);
+app.use('/api/study', studyRoutes);
 
 app.get('/health', (_, res) => res.json({ status: 'ok' }));
 

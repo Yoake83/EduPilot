@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { authHeaders } from '@/hooks/useApi';
+import { Topbar } from '@/components/Topbar';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -75,20 +76,16 @@ export default function GroupDetailPage() {
 
   return (
     <div style={{ ...s, background: '#F5F0E8', minHeight: '100vh' }}>
-      <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E5E0D5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Link href="/groups" style={{ fontSize: 13, color: '#6B7280', textDecoration: 'none' }}>← Groups</Link>
-          <span style={{ fontSize: 13, color: '#E5E0D5' }}>/</span>
-          <span style={{ fontSize: 13, color: '#111', fontWeight: 600 }}>{group.name}</span>
-        </div>
-        {isTeacher && (
-          <Link href={`/assignments/create?groupId=${group._id}`} style={{ padding: '7px 14px', background: '#0A4A3C', color: '#F2B759', borderRadius: 999, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>
-            + Add Assignment
-          </Link>
-        )}
-      </div>
+      <Topbar
+        title={`Groups / ${group.name}`}
+        action={isTeacher ? { label: '+ Add Assignment', href: `/assignments/create?groupId=${group._id}` } : undefined}
+      />
 
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '28px 24px' }}>
+        <div style={{ marginBottom: 14 }}>
+          <Link href="/groups" style={{ fontSize: 13, color: '#6B7280', textDecoration: 'none' }}>← Back to Groups</Link>
+        </div>
+
         {/* Header card */}
         <div style={{ background: '#0A4A3C', borderRadius: 16, padding: '24px 28px', marginBottom: 24, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 20 }}>
           <div>
@@ -110,22 +107,25 @@ export default function GroupDetailPage() {
           )}
         </div>
 
-        {/* Tabs */}
-        <div style={{ display: 'flex', gap: 4, marginBottom: 20, background: '#fff', borderRadius: 10, padding: 4, border: '0.5px solid #E5E0D5', width: 'fit-content' }}>
-          {(['assignments', 'students'] as const).map((t) => (
-            <button key={t} onClick={() => setTab(t)} style={{
-              padding: '7px 18px', borderRadius: 7, fontSize: 13, fontWeight: 600,
-              border: 'none', cursor: 'pointer', textTransform: 'capitalize' as const,
-              background: tab === t ? '#0A4A3C' : 'transparent',
-              color: tab === t ? '#F2B759' : '#6B7280',
-            }}>
-              {t} {t === 'assignments' ? `(${assignments.length})` : `(${group.students.length})`}
-            </button>
-          ))}
+        {/* Tabs + Discussion link */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 4, background: '#fff', borderRadius: 10, padding: 4, border: '0.5px solid #E5E0D5', width: 'fit-content' }}>
+            {(['assignments', 'students'] as const).map((t) => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                padding: '7px 18px', borderRadius: 7, fontSize: 13, fontWeight: 600,
+                border: 'none', cursor: 'pointer', textTransform: 'capitalize' as const,
+                background: tab === t ? '#0A4A3C' : 'transparent',
+                color: tab === t ? '#F2B759' : '#6B7280',
+              }}>
+                {t} {t === 'assignments' ? `(${assignments.length})` : `(${group.students.length})`}
+              </button>
+            ))}
+          </div>
+          <Link href={`/groups/${id}/forum`} style={{ padding: '7px 14px', background: '#F5F0E8', color: '#0A4A3C', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>
+            💬 Discussion
+          </Link>
         </div>
-<Link href={`/groups/${id}/forum`} style={{ padding: '7px 14px', background: '#F5F0E8', color: '#0A4A3C', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>
-  💬 Discussion
-</Link>
+
         {/* Assignments tab */}
         {tab === 'assignments' && (
           assignments.length === 0 ? (

@@ -13,7 +13,6 @@ function buildPrompt(data: GenerationJobData): string {
   const totalMarks = data.questionTypes.reduce((s, qt) => s + qt.count * qt.marks, 0);
   const totalQuestions = data.questionTypes.reduce((s, qt) => s + qt.count, 0);
 
-  // If PDF content was uploaded, instruct Groq to use it as source material
   const fileSection = data.fileContent
     ? `\nSOURCE MATERIAL (generate questions strictly based on this content):\n"""\n${data.fileContent.slice(0, 6000)}\n"""\n`
     : '';
@@ -37,13 +36,13 @@ Rules:
 3. Include a short answer key for each question
 4. Questions must be appropriate for grade ${data.grade}
 5. Each section must have a clear instruction line
-${data.fileContent ? '6. Questions MUST be based on the source material provided above. Do not invent topics outside it.' : ''}
+${data.fileContent ? '6. Questions MUST be based on the source material provided above.' : ''}
 
-You MUST respond with ONLY valid JSON. No markdown, no code fences, no explanation. Just raw JSON like this:
+You MUST respond with ONLY valid JSON. No markdown, no code fences, no explanation:
 {
-  "schoolName": "Delhi Public School, Bokaro",
   "subject": "${data.subject}",
   "grade": "${data.grade}",
+  "title": "${data.title}",
   "timeAllowed": "1 hour 30 minutes",
   "totalMarks": ${totalMarks},
   "sections": [
@@ -95,7 +94,8 @@ function parseLLMResponse(raw: string): GeneratedPaper {
   }));
 
   return {
-    schoolName: String(parsed.schoolName || 'Delhi Public School'),
+    // No school name — use title instead
+    schoolName: parsed.title || parsed.subject || 'Assignment',
     subject: String(parsed.subject),
     grade: String(parsed.grade),
     timeAllowed: String(parsed.timeAllowed || '1 hour'),
