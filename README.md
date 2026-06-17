@@ -2,7 +2,7 @@
 
 > AI-powered educational platform that brings together AI-assisted teaching tools, classroom management, and student analytics into one cohesive system — built solo as a full-stack engineering project.
 
-**Live Demo:** [your-vercel-url.vercel.app](#) · **Backend API:** [edupilot-dmy4.onrender.com](#)
+**Live Demo:** https://edu-pilot-nine.vercel.app/(#) · **Backend API:** [edupilot-dmy4.onrender.com](#)
 
 ---
 
