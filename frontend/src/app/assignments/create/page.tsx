@@ -93,24 +93,24 @@ function CreateAssignmentForm() {
   const totalMarks = form.questionTypes.reduce((s, qt) => s + (qt.count || 0) * (qt.marks || 0), 0);
 
   return (
-    <div className="min-h-full bg-[#F5F0E8]">
+    <div className="min-h-full bg-[#F7F5EF]">
       {/* Top bar */}
-      <div className="bg-white border-b border-[#E5E0D5] px-6 py-4 flex items-center gap-3">
+      <div className="bg-white border-b border-[#E2E5EC] px-6 py-4 flex items-center gap-3">
         <button onClick={() => router.back()} className="text-[#9CA3AF] hover:text-[#1A1A1A]">←</button>
         <span className="text-sm text-[#9CA3AF]">Assignment</span>
-        {groupId && <span className="text-xs px-2 py-0.5 rounded-full bg-[#0A4A3C]/10 text-[#0A4A3C] font-medium">Linked to class</span>}
+        {groupId && <span className="text-xs px-2 py-0.5 rounded-full bg-[#315ED8]/10 text-[#315ED8] font-medium">Linked to class</span>}
       </div>
 
       <div className="max-w-2xl mx-auto py-8 px-4">
-        <div className="bg-white rounded-2xl border border-[#E5E0D5] p-8">
-          <h1 className="text-lg font-semibold text-[#0A4A3C] mb-1">Create Assignment</h1>
+        <div className="bg-white rounded-2xl border border-[#E2E5EC] p-8">
+          <h1 className="text-lg font-semibold text-[#315ED8] mb-1">Create Assignment</h1>
           <p className="text-xs text-[#9CA3AF] mb-6">Set up and create a new assignment for your students.</p>
 
           {/* File upload */}
           <div
             className={clsx(
               'border-2 border-dashed rounded-xl p-8 flex flex-col items-center gap-3 mb-6 cursor-pointer transition-colors',
-              dragOver ? 'border-[#F2B759] bg-[#F2B759]/10' : 'border-[#E5E0D5] hover:border-[#0A4A3C]/30'
+              dragOver ? 'border-[#315ED8] bg-[#315ED8]/10' : 'border-[#E2E5EC] hover:border-[#315ED8]/30'
             )}
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
@@ -128,7 +128,7 @@ function CreateAssignmentForm() {
               className="hidden"
               onChange={(e) => { if (e.target.files?.[0]) setForm({ file: e.target.files[0] }); }}
             />
-            <div className="w-12 h-12 bg-[#F5F0E8] rounded-full flex items-center justify-center text-2xl">📄</div>
+            <div className="w-12 h-12 bg-[#F7F5EF] rounded-full flex items-center justify-center text-2xl">📄</div>
             {form.file ? (
               <div className="text-center">
                 <p className="text-sm font-medium text-[#1A1A1A]">{form.file.name}</p>
@@ -141,7 +141,7 @@ function CreateAssignmentForm() {
               <>
                 <p className="text-sm text-[#6B7280] text-center">Choose a file or drag & drop it here</p>
                 <p className="text-xs text-[#9CA3AF]">JPEG, PNG, PDF, up to 10MB</p>
-                <button className="px-4 py-1.5 border border-[#E5E0D5] rounded-lg text-sm text-[#6B7280] hover:bg-[#F9F9F9]">
+                <button className="px-4 py-1.5 border border-[#E2E5EC] rounded-lg text-sm text-[#6B7280] hover:bg-[#F9F9F9]">
                   Browse Files
                 </button>
               </>
@@ -158,7 +158,7 @@ function CreateAssignmentForm() {
                 placeholder="e.g. Quiz on Electricity"
                 className={clsx(
                   'w-full px-3 py-2.5 border rounded-lg text-sm outline-none transition-colors',
-                  errors.title ? 'border-red-400' : 'border-[#E5E0D5] focus:border-[#0A4A3C]'
+                  errors.title ? 'border-red-400' : 'border-[#E2E5EC] focus:border-[#315ED8]'
                 )}
               />
               {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
@@ -169,7 +169,7 @@ function CreateAssignmentForm() {
                 value={form.subject}
                 onChange={(e) => setForm({ subject: e.target.value })}
                 placeholder="e.g. Science"
-                className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.subject ? 'border-red-400' : 'border-[#E5E0D5] focus:border-[#0A4A3C]')}
+                className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.subject ? 'border-red-400' : 'border-[#E2E5EC] focus:border-[#315ED8]')}
               />
             </div>
             <div>
@@ -178,7 +178,7 @@ function CreateAssignmentForm() {
                 value={form.grade}
                 onChange={(e) => setForm({ grade: e.target.value })}
                 placeholder="e.g. Grade 8"
-                className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.grade ? 'border-red-400' : 'border-[#E5E0D5] focus:border-[#0A4A3C]')}
+                className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.grade ? 'border-red-400' : 'border-[#E2E5EC] focus:border-[#315ED8]')}
               />
             </div>
           </div>
@@ -190,7 +190,7 @@ function CreateAssignmentForm() {
               type="date"
               value={form.dueDate}
               onChange={(e) => setForm({ dueDate: e.target.value })}
-              className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.dueDate ? 'border-red-400' : 'border-[#E5E0D5] focus:border-[#0A4A3C]')}
+              className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.dueDate ? 'border-red-400' : 'border-[#E2E5EC] focus:border-[#315ED8]')}
             />
           </div>
 
@@ -210,18 +210,18 @@ function CreateAssignmentForm() {
                     <select
                       value={qt.type}
                       onChange={(e) => updateQuestionType(qt.id, { type: e.target.value })}
-                      className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none bg-white', errors[`qt_type_${i}`] ? 'border-red-400' : 'border-[#E5E0D5]')}
+                      className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none bg-white', errors[`qt_type_${i}`] ? 'border-red-400' : 'border-[#E2E5EC]')}
                     >
                       <option value="">Select type</option>
                       {QUESTION_TYPE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
                     </select>
                   </div>
-                  <div className="flex items-center border border-[#E5E0D5] rounded-lg overflow-hidden">
+                  <div className="flex items-center border border-[#E2E5EC] rounded-lg overflow-hidden">
                     <button onClick={() => updateQuestionType(qt.id, { count: Math.max(1, qt.count - 1) })} className="w-8 h-10 flex items-center justify-center text-[#6B7280] hover:bg-[#F9F9F9]">−</button>
                     <span className="w-8 text-center text-sm font-medium">{qt.count}</span>
                     <button onClick={() => updateQuestionType(qt.id, { count: qt.count + 1 })} className="w-8 h-10 flex items-center justify-center text-[#6B7280] hover:bg-[#F9F9F9]">+</button>
                   </div>
-                  <div className="flex items-center border border-[#E5E0D5] rounded-lg overflow-hidden">
+                  <div className="flex items-center border border-[#E2E5EC] rounded-lg overflow-hidden">
                     <button onClick={() => updateQuestionType(qt.id, { marks: Math.max(1, qt.marks - 1) })} className="w-8 h-10 flex items-center justify-center text-[#6B7280] hover:bg-[#F9F9F9]">−</button>
                     <span className="w-8 text-center text-sm font-medium">{qt.marks}</span>
                     <button onClick={() => updateQuestionType(qt.id, { marks: qt.marks + 1 })} className="w-8 h-10 flex items-center justify-center text-[#6B7280] hover:bg-[#F9F9F9]">+</button>
@@ -254,7 +254,7 @@ function CreateAssignmentForm() {
               onChange={(e) => setForm({ additionalInstructions: e.target.value })}
               placeholder="e.g. Cover chapters 1-3, focus on practical applications..."
               rows={3}
-              className="w-full px-3 py-2.5 border border-[#E5E0D5] rounded-lg text-sm outline-none focus:border-[#0A4A3C] resize-none"
+              className="w-full px-3 py-2.5 border border-[#E2E5EC] rounded-lg text-sm outline-none focus:border-[#315ED8] resize-none"
             />
           </div>
 
@@ -262,17 +262,17 @@ function CreateAssignmentForm() {
           <div className="flex items-center justify-between">
             <button
               onClick={() => router.back()}
-              className="flex items-center gap-2 px-5 py-2.5 border border-[#E5E0D5] rounded-full text-sm text-[#6B7280] hover:bg-[#F9F9F9]"
+              className="flex items-center gap-2 px-5 py-2.5 border border-[#E2E5EC] rounded-full text-sm text-[#6B7280] hover:bg-[#F9F9F9]"
             >
               ← Previous
             </button>
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-6 py-2.5 bg-[#0A4A3C] text-[#F2B759] rounded-full text-sm font-bold hover:opacity-90 disabled:opacity-60 transition-opacity"
+              className="flex items-center gap-2 px-6 py-2.5 bg-[#315ED8] text-[#FFFFFF] rounded-full text-sm font-bold hover:opacity-90 disabled:opacity-60 transition-opacity"
             >
               {isSubmitting ? (
-                <><span className="w-4 h-4 border-2 border-[#F2B759] border-t-transparent rounded-full animate-spin" />Generating...</>
+                <><span className="w-4 h-4 border-2 border-[#FFFFFF] border-t-transparent rounded-full animate-spin" />Generating...</>
               ) : 'Generate ✦'}
             </button>
           </div>
@@ -285,7 +285,7 @@ function CreateAssignmentForm() {
 // ✅ Default export wraps the form in Suspense to satisfy Next.js requirement
 export default function CreateAssignmentPage() {
   return (
-    <Suspense fallback={<div className="min-h-full bg-[#F5F0E8] flex items-center justify-center text-sm text-[#9CA3AF]">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-full bg-[#F7F5EF] flex items-center justify-center text-sm text-[#9CA3AF]">Loading...</div>}>
       <CreateAssignmentForm />
     </Suspense>
   );
