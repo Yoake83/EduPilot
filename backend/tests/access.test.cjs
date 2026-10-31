@@ -50,3 +50,28 @@ test('WebSocket rejects missing tokens and derives notification identity from JW
  ws.close(); await once(ws, 'close');
  await new Promise(resolve => server.close(resolve));
 });
+const { QuizModel } = require('../dist/models/Quiz');
+const quizController = require('../dist/controllers/quiz.controller');
+const { StudyMaterialModel } = require('../dist/models/StudyMaterial');
+const { askQuestion } = require('../dist/controllers/study.controller');
+function response() { return { code:200, body:null, status(code) { this.code=code;return this; },json(body) { this.body=body;return this; } }; }
+test('quiz deletion rejects another owner without deleting',async()=>{
+ const read=QuizModel.findById,del=QuizModel.findByIdAndDelete;
+ let deleted=false;
+ try { QuizModel.findById=async()=>({createdBy:'owner'});QuizModel.findByIdAndDelete=async()=>{deleted=true};const res=response();await quizController.deleteQuiz({params:{id:'test'},user:{userId:'outsider',role:'teacher'}},res);assert.equal(res.code,403);assert.equal(deleted,false); }
+ finally {QuizModel.findById=read;QuizModel.findByIdAndDelete=del;}
+});
+test('private study retrieval rejects non-owner before AI call',async()=>{
+ const original=StudyMaterialModel.findById;
+ try {StudyMaterialModel.findById=async()=>({uploadedBy:'owner',chunks:[{text:'private',index:0}]});const res=response();await askQuestion({body:{materialId:'test',question:'What is here?'},user:{userId:'outsider',role:'student'}},res);assert.equal(res.code,403);}
+ finally {StudyMaterialModel.findById=original;}
+});
+test('safe router catches rejected async handlers and validates resource IDs',async()=>{
+ const express=require('express');const {safeRouter}=require('../dist/middleware/safe-router');const app=express();const router=safeRouter();router.get('/error',async()=>{throw new Error('expected')});router.get('/:id',(_req,res)=>res.json({ok:true}));app.use(router);app.use((_error,_req,res,_next)=>res.status(500).json({error:'handled'}));const server=app.listen(0,'127.0.0.1');await once(server,'listening');try{const base=`http://127.0.0.1:${server.address().port}`;assert.equal((await fetch(base+'/error')).status,500);assert.equal((await fetch(base+'/invalid')).status,400);assert.equal((await fetch(base+'/507f1f77bcf86cd799439011')).status,200);}finally{await new Promise(resolve=>server.close(resolve));}
+});
+
+require('node:test').after(async()=>{
+ await require('../dist/queues/quiz.queue').quizQueue.close().catch(() => {});
+ const {redis,redisForBull}=require('../dist/services/redis');
+ redis.disconnect();redisForBull.disconnect();
+});

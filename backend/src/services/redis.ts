@@ -6,7 +6,7 @@ const isTLS = url.startsWith('rediss');
 
 function createRedis(overrides = {}) {
   return new Redis(url, {
-    ...(isTLS ? { tls: { rejectUnauthorized: false } } : {}),
+    ...(isTLS ? { tls: { rejectUnauthorized: true } } : {}),
     connectTimeout: 10000,
     keepAlive: 10000,
     retryStrategy: (times) => {
@@ -14,7 +14,7 @@ function createRedis(overrides = {}) {
       return Math.min(times * 500, 2000);
     },
     reconnectOnError: () => false,
-    enableOfflineQueue: true,
+    enableOfflineQueue: false,
     ...overrides,
   });
 }
@@ -28,3 +28,10 @@ redis.on('error', (err) => {
   }
 });
 redis.on('connect', () => console.log('[redis] connected'));
+redisForBull.on('error', () => {}); // Connection state is exposed by readiness checks.
+
+export let queueRedisCompatible = false;
+redisForBull.on('ready', async () => {
+ try { const info = await redisForBull.info('server'); const version = /redis_version:(\d+)/.exec(info); queueRedisCompatible = !!version && Number(version[1]) >= 5; } catch { queueRedisCompatible = false; }
+});
+redisForBull.on('close', () => { queueRedisCompatible = false; });

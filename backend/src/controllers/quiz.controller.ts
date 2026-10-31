@@ -27,8 +27,9 @@ export async function createQuiz(req: Request, res: Response) {
     const parsedTypes: QuizQuestionType[] =
       typeof questionTypes === 'string' ? JSON.parse(questionTypes) : questionTypes;
 
+    if (!Array.isArray(parsedTypes) || !parsedTypes.length || parsedTypes.some(t => !['mcq','true_false','fill_blank'].includes(t))) return res.status(400).json({error:'Invalid question types'});
     const parsedTotal = Number(totalQuestions);
-    if (parsedTotal < 1 || parsedTotal > 50) {
+    if (!Number.isInteger(parsedTotal) || parsedTotal < 1 || parsedTotal > 50) {
       return res.status(400).json({ error: 'Total questions must be between 1 and 50' });
     }
 
@@ -67,8 +68,8 @@ export async function createQuiz(req: Request, res: Response) {
   }
 }
 
-export async function getQuizzes(_req: Request, res: Response) {
-  const quizzes = await QuizModel.find()
+export async function getQuizzes(req: Request, res: Response) {
+  const quizzes = await QuizModel.find(req.user!.role === 'admin' ? {} : { createdBy: req.user!.userId })
     .select('-questions -fileContent')
     .sort({ createdAt: -1 })
     .limit(50);
@@ -78,10 +79,14 @@ export async function getQuizzes(_req: Request, res: Response) {
 export async function getQuiz(req: Request, res: Response) {
   const quiz = await QuizModel.findById(req.params.id).select('-fileContent');
   if (!quiz) return res.status(404).json({ error: 'Quiz not found' });
+  if (req.user!.role !== 'admin' && quiz.createdBy !== req.user!.userId) return res.status(403).json({error:'Access denied'});
   res.json({ quiz });
 }
 
 export async function deleteQuiz(req: Request, res: Response) {
+  const quiz = await QuizModel.findById(req.params.id);
+  if (!quiz) return res.status(404).json({error:'Quiz not found'});
+  if (req.user!.role !== 'admin' && quiz.createdBy !== req.user!.userId) return res.status(403).json({error:'Access denied'});
   await QuizModel.findByIdAndDelete(req.params.id);
   res.json({ ok: true });
 }

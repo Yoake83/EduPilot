@@ -1,7 +1,10 @@
 import Groq from 'groq-sdk';
 import fs from 'fs/promises';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+function getGroq() {
+  if (!process.env.GROQ_API_KEY) throw new Error('AI features require GROQ_API_KEY');
+  return new Groq({ apiKey: process.env.GROQ_API_KEY });
+}
 
 // ── Text extraction ──────────────────────────────────────────────────────────
 export async function extractTextFromPDF(filePath: string): Promise<string> {
@@ -88,7 +91,7 @@ export async function generateRAGAnswer(
 ): Promise<string> {
   const context = relevantChunks.join('\n\n---\n\n');
 
-  const response = await groq.chat.completions.create({
+  const response = await getGroq().chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [
       {

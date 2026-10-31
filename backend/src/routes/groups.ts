@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import { safeRouter } from '../middleware/safe-router';
 import {
   createGroup, joinGroup, getMyGroups, getGroup,
   leaveGroup, deleteGroup, removeStudent,
 } from '../controllers/group.controller';
 import { requireAuth, requireRole } from '../middleware/auth.middleware';
 
-const router = Router();
+const router = safeRouter();
 
 // IMPORTANT: specific routes MUST come before /:id
 router.get('/', requireAuth, getMyGroups);

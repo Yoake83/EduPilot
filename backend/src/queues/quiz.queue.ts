@@ -22,3 +22,4 @@ export const quizQueue = new Queue<QuizJobData>('quiz-generation', {
     removeOnFail: 50,
   },
 });
+quizQueue.on('error', () => {}); // API generation requests are gated by Redis readiness.

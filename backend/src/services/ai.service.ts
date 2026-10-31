@@ -3,7 +3,10 @@ import type { GeneratedPaper, Section, Question, Difficulty } from '../types';
 import type { GenerationJobData } from '../queues/generation.queue';
 import { v4 as uuid } from 'uuid';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+function getGroq() {
+  if (!process.env.GROQ_API_KEY) throw new Error('AI features require GROQ_API_KEY');
+  return new Groq({ apiKey: process.env.GROQ_API_KEY });
+}
 
 function buildPrompt(data: GenerationJobData): string {
   const qtList = data.questionTypes
@@ -105,7 +108,7 @@ function parseLLMResponse(raw: string): GeneratedPaper {
 }
 
 export async function generatePaper(data: GenerationJobData): Promise<GeneratedPaper> {
-  const response = await groq.chat.completions.create({
+  const response = await getGroq().chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [
       {

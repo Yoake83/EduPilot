@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { safeRouter } from '../middleware/safe-router';
 import multer from 'multer';
 import {
   submitAssignment,
@@ -9,7 +9,7 @@ import {
 } from '../controllers/submission.controller';
 import { requireAuth, requireRole } from '../middleware/auth.middleware';
 
-const router = Router();
+const router = safeRouter();
 const upload = multer({ dest: 'uploads/', limits: { fileSize: 20 * 1024 * 1024 } });
 
 // Student routes

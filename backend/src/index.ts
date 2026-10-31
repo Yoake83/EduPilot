@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+import { redisForBull, queueRedisCompatible } from './services/redis';
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -35,7 +37,13 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/evaluate', evaluatorRoutes);
 app.use('/api/study', studyRoutes);
 
-app.get('/health', (_, res) => res.json({ status: 'ok' }));
+app.get('/health', (_, res) => res.json({ status: 'ok', database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected', redis: redisForBull.status, queueRedisCompatible, aiConfigured: !!process.env.GROQ_API_KEY }));
+app.get('/ready', (_,res) => { const ready = mongoose.connection.readyState === 1 && redisForBull.status === 'ready' && queueRedisCompatible && !!process.env.GROQ_API_KEY; res.status(ready ? 200 : 503).json({ready}); });
+app.use((err: any, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+ if (res.headersSent) return next(err);
+ const status = err.name === 'CastError' || err.name === 'ValidationError' || err.type === 'entity.parse.failed' ? 400 : err.code === 11000 ? 409 : err.code === 'LIMIT_FILE_SIZE' ? 413 : 500;
+ res.status(status).json({ error: status === 400 ? 'Invalid request' : status === 409 ? 'Resource already exists' : status === 413 ? 'File is too large' : 'Request could not be completed' });
+});
 
 const PORT = process.env.PORT || 4000;
 

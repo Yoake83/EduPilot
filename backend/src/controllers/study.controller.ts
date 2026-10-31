@@ -3,6 +3,11 @@ import { StudyMaterialModel } from '../models/StudyMaterial';
 import { GroupModel } from '../models/Group';
 import { extractTextFromPDF, chunkText, findRelevantChunks, generateRAGAnswer } from '../services/rag.service';
 
+async function canReadMaterial(user: NonNullable<Request['user']>, material: { uploadedBy: string; groupId?: unknown }) {
+ if (user.role === 'admin' || material.uploadedBy === user.userId) return true;
+ return !!material.groupId && !!await GroupModel.exists({_id:material.groupId,$or:[{teacherId:user.userId},{'students.userId':user.userId}]});
+}
+
 export async function uploadMaterial(req: Request, res: Response) {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
@@ -64,6 +69,7 @@ export async function getMaterials(req: Request, res: Response) {
 
     if (groupId) {
       // Group materials — visible to all group members
+      if (req.user!.role !== 'admin' && !await GroupModel.exists({_id:groupId,$or:[{teacherId:userId},{'students.userId':userId}]})) return res.status(403).json({error:'Access denied'});
       query.groupId = groupId;
     } else {
       // Personal materials + group materials from joined groups
@@ -121,6 +127,7 @@ export async function askQuestion(req: Request, res: Response) {
     const material = await StudyMaterialModel.findById(materialId);
     if (!material) return res.status(404).json({ error: 'Material not found' });
 
+    if (!await canReadMaterial(req.user!, material)) return res.status(403).json({error:'Access denied'});
     if (material.chunks.length === 0) {
       return res.status(400).json({ error: 'Material has no processable content' });
     }

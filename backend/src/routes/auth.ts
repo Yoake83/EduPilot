@@ -1,8 +1,8 @@
-import { Router } from 'express';
+import { safeRouter } from '../middleware/safe-router';
 import { register, login, getMe } from '../controllers/auth.controller';
 import { requireAuth } from '../middleware/auth.middleware';
 
-const router = Router();
+const router = safeRouter();
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {

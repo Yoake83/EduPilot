@@ -26,8 +26,9 @@ export async function createAssignment(req: Request, res: Response) {
     }
 
     const parsedQT = typeof questionTypes === 'string' ? JSON.parse(questionTypes) : questionTypes;
+    if (!Array.isArray(parsedQT) || !parsedQT.length || parsedQT.length > 20 || !Number.isFinite(Date.parse(dueDate))) return res.status(400).json({error:'Invalid question configuration or due date'});
     for (const qt of parsedQT) {
-      if (!qt.type || qt.count < 1 || qt.marks < 1) {
+      if (!qt.type || !Number.isInteger(qt.count) || !Number.isFinite(qt.marks) || qt.count < 1 || qt.count > 100 || qt.marks < 1 || qt.marks > 1000) {
         return res.status(400).json({ error: 'Invalid question type configuration' });
       }
     }

@@ -114,7 +114,7 @@ export async function getGroup(req: Request, res: Response) {
     const assignments = await AssignmentModel.find({ groupId: group._id }).sort({ createdAt: -1 });
     console.log('[group] found', assignments.length, 'assignments for group', group._id);
 
-    res.json({ group, assignments });
+    res.json({ group, assignments: assignments.map(a => { const data = a.toObject(); if (role === 'student') { delete data.filePath; delete data.additionalInstructions; for (const section of data.result?.sections || []) for (const question of section.questions || []) delete question.answerKey; } return data; }) });
   } catch (err) {
     console.error('[group] getGroup error:', err);
     res.status(500).json({ error: 'Failed to fetch group' });

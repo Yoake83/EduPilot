@@ -1,10 +1,11 @@
-import { Router } from 'express';
+import { requireQueue } from '../middleware/service-ready';
+import { safeRouter } from '../middleware/safe-router';
 import { generationQueue } from '../queues/generation.queue';
 
 import { requireAuth } from '../middleware/auth.middleware';
 import { AssignmentModel } from '../models/Assignment';
-const router = Router();
-router.use(requireAuth);
+const router = safeRouter();
+router.use(requireAuth, requireQueue);
 
 router.get('/status/:jobId', async (req, res) => {
   const job = await generationQueue.getJob(req.params.jobId);

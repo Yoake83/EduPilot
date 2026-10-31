@@ -20,3 +20,5 @@ export const generationQueue = new Queue<GenerationJobData>('generation', {
     removeOnFail: 50,
   },
 });
+
+generationQueue.on('error', () => {}); // API generation requests are gated by Redis readiness.

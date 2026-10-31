@@ -3,7 +3,10 @@ import type { QuizJobData } from '../queues/quiz.queue';
 import type { QuizQuestion, QuizQuestionType } from '../models/Quiz';
 import { v4 as uuid } from 'uuid';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+function getGroq() {
+  if (!process.env.GROQ_API_KEY) throw new Error('AI features require GROQ_API_KEY');
+  return new Groq({ apiKey: process.env.GROQ_API_KEY });
+}
 
 function buildQuizPrompt(data: QuizJobData): string {
   const typeBreakdown = distributeQuestions(data.questionTypes, data.totalQuestions);
@@ -107,7 +110,7 @@ function parseQuizResponse(raw: string): QuizQuestion[] {
 }
 
 export async function generateQuiz(data: QuizJobData): Promise<QuizQuestion[]> {
-  const response = await groq.chat.completions.create({
+  const response = await getGroq().chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [
       {
