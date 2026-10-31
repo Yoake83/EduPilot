@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { getToken } from './useApi';
 import { useAssignmentStore } from '@/store/assignmentStore';
 
 const WS_URL =
@@ -15,7 +16,8 @@ export function useAssignmentWebSocket(assignmentId: string | null) {
   useEffect(() => {
     if (!assignmentId) return;
 
-    const ws = new WebSocket(`${WS_URL}/ws?assignmentId=${assignmentId}`);
+    const ws = new WebSocket(`${WS_URL}/ws`);
+    ws.onopen = () => ws.send(JSON.stringify({ type: 'authenticate', token: getToken(), assignmentId }));
     wsRef.current = ws;
 
     ws.onmessage = (event) => {
