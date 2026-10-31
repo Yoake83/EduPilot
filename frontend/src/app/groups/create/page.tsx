@@ -39,23 +39,23 @@ export default function CreateGroupPage() {
 
   const inputStyle = {
     width: '100%', padding: '10px 12px', borderRadius: 8,
-    border: '1px solid #E5E0D5', fontSize: 13, outline: 'none',
+    border: '1px solid #E2E5EC', fontSize: 13, outline: 'none',
     background: '#FAFAF8', boxSizing: 'border-box' as const,
   };
 
   return (
-    <div style={{ background: '#F5F0E8', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
-      <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E5E0D5', display: 'flex', alignItems: 'center', padding: '0 24px', gap: 12 }}>
+    <div style={{ background: '#F7F5EF', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+      <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E2E5EC', display: 'flex', alignItems: 'center', padding: '0 24px', gap: 12 }}>
         <Link href="/groups" style={{ fontSize: 13, color: '#6B7280', textDecoration: 'none' }}>← Groups</Link>
-        <span style={{ fontSize: 13, color: '#E5E0D5' }}>/</span>
+        <span style={{ fontSize: 13, color: '#E2E5EC' }}>/</span>
         <span style={{ fontSize: 13, color: '#111' }}>Create Class</span>
       </div>
 
       <div style={{ maxWidth: 500, margin: '48px auto', padding: '0 24px' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0A4A3C', margin: '0 0 4px' }}>Create a Class</h1>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 4px' }}>Create a Class</h1>
         <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 28px' }}>Students will join using the code generated automatically.</p>
 
-        <div style={{ background: '#fff', borderRadius: 16, border: '0.5px solid #E5E0D5', padding: 28 }}>
+        <div style={{ background: '#fff', borderRadius: 16, border: '0.5px solid #E2E5EC', padding: 28 }}>
           <form onSubmit={handleSubmit}>
             {error && (
               <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
@@ -80,8 +80,8 @@ export default function CreateGroupPage() {
             </div>
             <button type="submit" disabled={loading} style={{
               width: '100%', padding: '11px 0', borderRadius: 10,
-              background: loading ? '#9CA3AF' : '#0A4A3C',
-              color: '#F2B759', fontSize: 14, fontWeight: 700,
+              background: loading ? '#9CA3AF' : '#315ED8',
+              color: '#FFFFFF', fontSize: 14, fontWeight: 700,
               border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
             }}>
               {loading ? 'Creating…' : 'Create Class'}
