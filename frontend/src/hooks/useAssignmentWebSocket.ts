@@ -16,7 +16,8 @@ export function useAssignmentWebSocket(assignmentId: string | null) {
   useEffect(() => {
     if (!assignmentId) return;
 
-    const ws = new WebSocket(`${WS_URL}/ws?assignmentId=${encodeURIComponent(assignmentId)}&token=${encodeURIComponent(getToken() || "")}`);
+    const ws = new WebSocket(`${WS_URL}/ws`);
+    ws.onopen = () => ws.send(JSON.stringify({ type: 'authenticate', token: getToken(), assignmentId }));
     wsRef.current = ws;
 
     ws.onmessage = (event) => {

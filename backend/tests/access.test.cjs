@@ -35,10 +35,14 @@ test('WebSocket rejects missing tokens and derives notification identity from JW
  const base = `ws://127.0.0.1:${server.address().port}/ws`;
  const unauth = new WebSocket(base + '?userId=victim');
  const closed = once(unauth, 'close');
+ unauth.on('open', () => unauth.send(JSON.stringify({ type: 'authenticate', token: '' })));
  assert.equal((await closed)[0], 1008);
  const token = jwt.sign({ userId: 'actual', role: 'student' }, process.env.JWT_SECRET);
- const ws = new WebSocket(base + '?userId=victim&token=' + token);
+ const ws = new WebSocket(base + '?userId=victim');
  await once(ws, 'open');
+ const ready = once(ws, 'message');
+ ws.send(JSON.stringify({ type: 'authenticate', token }));
+ await ready;
  const received = once(ws, 'message');
  broadcastToUser('victim', { leaked: true });
  broadcastToUser('actual', { correct: true });

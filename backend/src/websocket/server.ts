@@ -13,41 +13,34 @@ let wss: WebSocketServer;
 export function initWebSocket(server: Server) {
   wss = new WebSocketServer({ server, path: '/ws' });
 
-  wss.on('connection', async (ws, req) => {
-    const url = new URL(req.url || '', 'http://localhost');
-    const assignmentId = url.searchParams.get('assignmentId');
-    let user: AuthPayload;
-    try {
-      user = jwt.verify(url.searchParams.get('token') || '', process.env.JWT_SECRET || '') as AuthPayload;
-      if (!user.userId) throw new Error('Invalid identity');
-      if (assignmentId) {
-        const assignment = await AssignmentModel.findById(assignmentId);
-        // Generation events contain answer keys: restrict them to educators.
-        if (!assignment || (user.role !== 'admin' && assignment.createdBy !== user.userId)) throw new Error('Forbidden');
-      }
-    } catch { ws.close(1008, 'Unauthorized'); return; }
-    if (ws.readyState !== WebSocket.OPEN) return;
-    const userId = user.userId;
-
-    if (assignmentId) {
-      if (!rooms.has(assignmentId)) rooms.set(assignmentId, new Set());
-      rooms.get(assignmentId)!.add(ws);
-      ws.on('close', () => {
-        rooms.get(assignmentId)?.delete(ws);
-        if (rooms.get(assignmentId)?.size === 0) rooms.delete(assignmentId);
-      });
-    }
-
-    if (userId) {
-      if (!userSockets.has(userId)) userSockets.set(userId, new Set());
-      userSockets.get(userId)!.add(ws);
-      ws.on('close', () => {
-        userSockets.get(userId)?.delete(ws);
-        if (userSockets.get(userId)?.size === 0) userSockets.delete(userId);
-      });
-    }
-
+  wss.on('connection', (ws) => {
+    const timer = setTimeout(() => ws.close(1008, 'Authentication required'), 5000);
+    ws.on('close', () => clearTimeout(timer));
     ws.on('error', console.error);
+    ws.once('message', async (raw) => {
+      clearTimeout(timer);
+      try {
+        const message = JSON.parse(raw.toString());
+        if (message.type !== 'authenticate') throw new Error('Authentication required');
+        const user = jwt.verify(message.token, process.env.JWT_SECRET || '') as AuthPayload;
+        if (!user.userId) throw new Error('Invalid identity');
+        const assignmentId = message.assignmentId;
+        if (assignmentId) {
+          const assignment = await AssignmentModel.findById(assignmentId);
+          if (!assignment || (user.role !== 'admin' && assignment.createdBy !== user.userId)) throw new Error('Forbidden');
+        }
+        if (ws.readyState !== WebSocket.OPEN) return;
+        if (assignmentId) {
+          if (!rooms.has(assignmentId)) rooms.set(assignmentId, new Set());
+          rooms.get(assignmentId)!.add(ws);
+          ws.on('close', () => { rooms.get(assignmentId)?.delete(ws); if (!rooms.get(assignmentId)?.size) rooms.delete(assignmentId); });
+        }
+        ws.send(JSON.stringify({ type: 'authenticated' }));
+        if (!userSockets.has(user.userId)) userSockets.set(user.userId, new Set());
+        userSockets.get(user.userId)!.add(ws);
+        ws.on('close', () => { userSockets.get(user.userId)?.delete(ws); if (!userSockets.get(user.userId)?.size) userSockets.delete(user.userId); });
+      } catch { ws.close(1008, 'Unauthorized'); }
+    });
   });
 
   console.log('WebSocket server initialized');
