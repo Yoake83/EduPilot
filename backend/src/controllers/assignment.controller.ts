@@ -5,6 +5,7 @@ import { generationQueue } from '../queues/generation.queue';
 import { redis } from '../services/redis';
 import { notifyGroupStudents } from '../services/notification.service';
 import fs from 'fs/promises';
+import { canReadAssignment } from '../services/access.service';
 
 async function extractFileText(filePath?: string): Promise<string | undefined> {
   if (!filePath) return undefined;
@@ -104,7 +105,7 @@ export async function getAssignments(req: Request, res: Response) {
         .populate('groupId', 'name subject teacherName');
     }
 
-    res.json({ assignments });
+    res.json({ assignments: assignments.map(a => publicAssignment(a, role)) });
   } catch (err) {
     console.error('[assignment] getAssignments error:', err);
     res.status(500).json({ error: 'Failed to fetch assignments' });
@@ -112,9 +113,10 @@ export async function getAssignments(req: Request, res: Response) {
 }
 
 export async function getAssignment(req: Request, res: Response) {
-  const assignment = await AssignmentModel.findById(req.params.id).populate('groupId', 'name subject');
+  const assignment = await AssignmentModel.findById(req.params.id);
   if (!assignment) return res.status(404).json({ error: 'Not found' });
-  res.json({ assignment });
+  if (!await canReadAssignment(req.user!, assignment)) return res.status(403).json({ error: 'Access denied' });
+  res.json({ assignment: publicAssignment(assignment, req.user!.role) });
 }
 
 export async function deleteAssignment(req: Request, res: Response) {
@@ -125,4 +127,15 @@ export async function deleteAssignment(req: Request, res: Response) {
   }
   await AssignmentModel.findByIdAndDelete(req.params.id);
   res.json({ ok: true });
+}
+function publicAssignment(assignment: any, role?: string) {
+  const data = assignment.toObject();
+  if (role === 'student') {
+    delete data.filePath;
+    delete data.additionalInstructions;
+    for (const section of data.result?.sections || []) {
+      for (const question of section.questions || []) delete question.answerKey;
+    }
+  }
+  return data;
 }
