@@ -30,7 +30,10 @@ export function NotificationBell() {
   return (
     <div ref={ref} style={{ position: 'relative' }}>
       <button
+        aria-label="Notifications"
+        aria-expanded={open}
         onClick={() => setOpen(!open)}
+        onKeyDown={event => { if (event.key === 'Escape') setOpen(false); }}
         style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', padding: 4 }}
       >
         <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
@@ -42,7 +45,7 @@ export function NotificationBell() {
           <span style={{
             position: 'absolute', top: 0, right: 0,
             width: 16, height: 16, borderRadius: '50%',
-            background: '#F2B759', color: '#0A4A3C',
+            background: '#315ED8', color: '#fff',
             fontSize: 9, fontWeight: 700,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
@@ -54,15 +57,15 @@ export function NotificationBell() {
       {open && (
         <div style={{
           position: 'absolute', right: 0, top: 36,
-          width: 320, background: '#fff',
+          width: 'min(320px, calc(100vw - 32px))', background: '#fff',
           borderRadius: 14, boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-          border: '0.5px solid #E5E0D5', zIndex: 200, overflow: 'hidden',
+          border: '0.5px solid #E2E5EC', zIndex: 200, overflow: 'hidden',
           fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         }}>
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '0.5px solid #F0EDE8' }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#0A4A3C' }}>
-              Notifications {unreadCount > 0 && <span style={{ fontSize: 11, color: '#F2B759' }}>({unreadCount} new)</span>}
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#315ED8' }}>
+              Notifications {unreadCount > 0 && <span style={{ fontSize: 11, color: '#315ED8' }}>({unreadCount} new)</span>}
             </span>
             {unreadCount > 0 && (
               <button onClick={markAllRead} style={{ fontSize: 11, color: '#6B7280', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
@@ -82,6 +85,9 @@ export function NotificationBell() {
               notifications.map((n) => (
                 <div
                   key={n._id}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); markRead(n._id); if (n.link) router.push(n.link); setOpen(false); } }}
                   onClick={() => {
                     markRead(n._id);
                     if (n.link) router.push(n.link);
@@ -90,7 +96,7 @@ export function NotificationBell() {
                   style={{
                     padding: '12px 16px',
                     borderBottom: '0.5px solid #F9F7F5',
-                    background: n.read ? '#fff' : 'rgba(242,183,89,0.06)',
+                    background: n.read ? '#fff' : 'rgba(49,94,216,0.06)',
                     cursor: n.link ? 'pointer' : 'default',
                     display: 'flex', gap: 10, alignItems: 'flex-start',
                   }}
@@ -104,7 +110,7 @@ export function NotificationBell() {
                     </p>
                   </div>
                   {!n.read && (
-                    <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#F2B759', flexShrink: 0, marginTop: 4 }} />
+                    <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#315ED8', flexShrink: 0, marginTop: 4 }} />
                   )}
                 </div>
               ))
