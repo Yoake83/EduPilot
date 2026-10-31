@@ -53,17 +53,17 @@ export default function AssignmentDetailPage() {
 
   if (loading) {
     return (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#F5F0E8' }}>
-        <div style={{ width: 28, height: 28, border: '3px solid #F2B759', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}/>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#F7F5EF' }}>
+        <div style={{ width: 28, height: 28, border: '3px solid #315ED8', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}/>
         <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F0E8', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: '#F7F5EF', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
       {/* Top bar */}
-      <div style={{ background: '#fff', borderBottom: '0.5px solid #E5E0D5', padding: '0 24px', height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 10 }}>
+      <div style={{ background: '#fff', borderBottom: '0.5px solid #E2E5EC', padding: '0 24px', height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button onClick={() => router.push('/assignments')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', fontSize: 18, padding: 0 }}>←</button>
           <span style={{ fontSize: 13, color: '#9CA3AF' }}>Assignments</span>
@@ -71,7 +71,7 @@ export default function AssignmentDetailPage() {
         {assignment?.status === 'completed' && assignment?.result && (
           <button
             onClick={() => handlePrint(assignment.result)}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 16px', background: '#0A4A3C', color: '#F2B759', border: 'none', borderRadius: 999, fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 16px', background: '#315ED8', color: '#FFFFFF', border: 'none', borderRadius: 999, fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}
           >
             ⬇ Download as PDF
           </button>
@@ -80,7 +80,7 @@ export default function AssignmentDetailPage() {
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '28px 20px' }}>
         {/* Banner */}
-        <div style={{ background: '#0A4A3C', color: '#fff', borderRadius: 14, padding: '16px 22px', marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+        <div style={{ background: '#315ED8', color: '#fff', borderRadius: 14, padding: '16px 22px', marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.5, flex: 1 }}>
             {assignment?.status === 'completed'
               ? `Here are customized Question Papers for your ${assignment?.grade} ${assignment?.subject} class.`
@@ -91,7 +91,7 @@ export default function AssignmentDetailPage() {
           {assignment?.status === 'completed' && assignment?.result && (
             <button
               onClick={() => handlePrint(assignment.result)}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: 'transparent', color: '#F2B759', border: '1px solid rgba(242,183,89,0.4)', borderRadius: 8, fontSize: 12.5, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: 'transparent', color: '#FFFFFF', border: '1px solid rgba(49,94,216,0.4)', borderRadius: 8, fontSize: 12.5, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
             >
               ⬇ Download
             </button>
@@ -100,14 +100,14 @@ export default function AssignmentDetailPage() {
 
         {/* Processing */}
         {(assignment?.status === 'pending' || assignment?.status === 'processing') && (
-          <div style={{ background: '#fff', borderRadius: 20, border: '0.5px solid #E5E0D5', padding: '64px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
-            <div style={{ width: 56, height: 56, border: '4px solid #F2B759', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.9s linear infinite' }}/>
+          <div style={{ background: '#fff', borderRadius: 20, border: '0.5px solid #E2E5EC', padding: '64px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+            <div style={{ width: 56, height: 56, border: '4px solid #315ED8', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.9s linear infinite' }}/>
             <div style={{ textAlign: 'center' }}>
-              <h2 style={{ fontSize: 16, fontWeight: 700, color: '#0A4A3C', margin: '0 0 6px' }}>Generating Question Paper</h2>
+              <h2 style={{ fontSize: 16, fontWeight: 700, color: '#315ED8', margin: '0 0 6px' }}>Generating Question Paper</h2>
               <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>AI is crafting your personalized assessment…</p>
             </div>
-            <div style={{ width: 260, background: '#F5F0E8', borderRadius: 999, height: 6, overflow: 'hidden' }}>
-              <div style={{ height: '100%', background: '#F2B759', borderRadius: 999, width: `${generationProgress || 10}%`, transition: 'width 0.5s ease' }}/>
+            <div style={{ width: 260, background: '#F7F5EF', borderRadius: 999, height: 6, overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: '#FFFFFF', borderRadius: 999, width: `${generationProgress || 10}%`, transition: 'width 0.5s ease' }}/>
             </div>
             <p style={{ fontSize: 12, color: '#9CA3AF', margin: 0 }}>{generationProgress || 0}%</p>
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
@@ -122,7 +122,7 @@ export default function AssignmentDetailPage() {
           <div style={{ background: '#fff', borderRadius: 20, border: '1px solid #FECACA', padding: '48px 24px', textAlign: 'center' }}>
             <p style={{ color: '#EF4444', fontWeight: 600, marginBottom: 8, fontSize: 15 }}>Generation failed</p>
             <p style={{ fontSize: 13, color: '#9CA3AF', marginBottom: 20 }}>Please go back and try again.</p>
-            <button onClick={() => router.push('/assignments/create')} style={{ padding: '9px 22px', background: '#0A4A3C', color: '#F2B759', border: 'none', borderRadius: 999, fontSize: 13, cursor: 'pointer', fontWeight: 700 }}>
+            <button onClick={() => router.push('/assignments/create')} style={{ padding: '9px 22px', background: '#315ED8', color: '#FFFFFF', border: 'none', borderRadius: 999, fontSize: 13, cursor: 'pointer', fontWeight: 700 }}>
               Try Again
             </button>
           </div>
@@ -134,21 +134,21 @@ export default function AssignmentDetailPage() {
 
 function QuestionPaperOutput({ paper }: { paper: GeneratedPaper }) {
   return (
-    <div id="question-paper" style={{ background: '#fff', borderRadius: 20, border: '0.5px solid #E5E0D5', overflow: 'hidden', boxShadow: '0 2px 16px rgba(0,0,0,0.04)' }}>
-      <div style={{ textAlign: 'center', padding: '32px 40px 24px', borderBottom: '0.5px solid #E5E0D5' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0A4A3C', margin: '0 0 6px' }}>{paper.schoolName}</h1>
+    <div id="question-paper" style={{ background: '#fff', borderRadius: 20, border: '0.5px solid #E2E5EC', overflow: 'hidden', boxShadow: '0 2px 16px rgba(0,0,0,0.04)' }}>
+      <div style={{ textAlign: 'center', padding: '32px 40px 24px', borderBottom: '0.5px solid #E2E5EC' }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 6px' }}>{paper.schoolName}</h1>
         <p style={{ fontSize: 13.5, color: '#6B7280', margin: '0 0 2px' }}>Subject: {paper.subject}</p>
         <p style={{ fontSize: 13.5, color: '#6B7280', margin: 0 }}>Class: {paper.grade}</p>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 40px', background: '#FAFAF8', borderBottom: '0.5px solid #E5E0D5' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 40px', background: '#FAFAF8', borderBottom: '0.5px solid #E2E5EC' }}>
         <span style={{ fontSize: 13, color: '#6B7280' }}>Time Allowed: <b style={{ color: '#111' }}>{paper.timeAllowed}</b></span>
         <span style={{ fontSize: 13, color: '#6B7280' }}>Maximum Marks: <b style={{ color: '#111' }}>{paper.totalMarks}</b></span>
       </div>
       <div style={{ padding: '24px 40px' }}>
-        <p style={{ fontSize: 12.5, color: '#6B7280', fontStyle: 'italic', margin: '0 0 20px', borderBottom: '0.5px solid #F5F0E8', paddingBottom: 16 }}>
+        <p style={{ fontSize: 12.5, color: '#6B7280', fontStyle: 'italic', margin: '0 0 20px', borderBottom: '0.5px solid #F7F5EF', paddingBottom: 16 }}>
           All questions are compulsory unless stated otherwise.
         </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, marginBottom: 28, paddingBottom: 20, borderBottom: '0.5px solid #E5E0D5' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, marginBottom: 28, paddingBottom: 20, borderBottom: '0.5px solid #E2E5EC' }}>
           {['Name', 'Roll Number', 'Class/ Section'].map((label) => (
             <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#374151' }}>
               <span style={{ fontWeight: 500 }}>{label}:</span>
@@ -165,13 +165,13 @@ function QuestionPaperOutput({ paper }: { paper: GeneratedPaper }) {
 function SectionBlock({ section }: { section: Section }) {
   return (
     <div style={{ marginBottom: 36 }}>
-      <h2 style={{ fontSize: 15, fontWeight: 700, textAlign: 'center', color: '#0A4A3C', margin: '0 0 4px' }}>{section.title}</h2>
+      <h2 style={{ fontSize: 15, fontWeight: 700, textAlign: 'center', color: '#315ED8', margin: '0 0 4px' }}>{section.title}</h2>
       <p style={{ fontSize: 12.5, color: '#6B7280', textAlign: 'center', fontStyle: 'italic', margin: '0 0 18px' }}>{section.instruction}</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {section.questions.map((q, qi) => <QuestionItem key={q.id} question={q} index={qi + 1} />)}
       </div>
       <p style={{ fontSize: 12, color: '#9CA3AF', textAlign: 'center', marginTop: 20, fontWeight: 500 }}>End of {section.title}</p>
-      <div style={{ borderBottom: '1px dashed #E5E0D5', marginTop: 8 }}/>
+      <div style={{ borderBottom: '1px dashed #E2E5EC', marginTop: 8 }}/>
     </div>
   );
 }
@@ -206,7 +206,7 @@ function handlePrint(paper: GeneratedPaper) {
   if (!win) return;
   const sectionsHTML = paper.sections.map((sec) => `
     <div style="margin-bottom:32px">
-      <h3 style="text-align:center;font-size:15px;font-weight:700;margin:0 0 4px;color:#0A4A3C">${sec.title}</h3>
+      <h3 style="text-align:center;font-size:15px;font-weight:700;margin:0 0 4px;color:#315ED8">${sec.title}</h3>
       <p style="text-align:center;font-style:italic;color:#666;font-size:12px;margin:0 0 16px">${sec.instruction}</p>
       ${sec.questions.map((q, i) => `
         <div style="display:flex;gap:8px;margin-bottom:12px">
@@ -222,7 +222,7 @@ function handlePrint(paper: GeneratedPaper) {
   win.document.write(`<!DOCTYPE html><html><head><title>${paper.schoolName}</title>
     <style>body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;font-size:13px;color:#111}@media print{body{margin:20px}}</style>
     </head><body>
-    <h1 style="font-size:18px;text-align:center;margin:0 0 4px;color:#0A4A3C">${paper.schoolName}</h1>
+    <h1 style="font-size:18px;text-align:center;margin:0 0 4px;color:#315ED8">${paper.schoolName}</h1>
     <p style="text-align:center;color:#555;font-size:13px;margin:0 0 2px">Subject: ${paper.subject}</p>
     <p style="text-align:center;color:#555;font-size:13px;margin:0 0 16px">Class: ${paper.grade}</p>
     <div style="display:flex;justify-content:space-between;border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:10px 0;margin-bottom:16px;font-size:12.5px;color:#555">

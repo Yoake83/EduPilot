@@ -34,7 +34,7 @@ export default function GroupsPage() {
   const s = { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' };
 
   return (
-    <div style={{ ...s, background: '#F5F0E8', minHeight: '100vh' }}>
+    <div style={{ ...s, background: '#F7F5EF', minHeight: '100vh' }}>
       <Topbar
         title={isTeacher ? 'My Classes' : 'Enrolled Classes'}
         action={{
@@ -44,7 +44,7 @@ export default function GroupsPage() {
       />
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '28px 24px' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0A4A3C', margin: '0 0 4px' }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 4px' }}>
           {isTeacher ? 'My Classes' : 'Enrolled Classes'}
         </h1>
         <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 24px' }}>
@@ -53,11 +53,11 @@ export default function GroupsPage() {
 
         {loading ? (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 0' }}>
-            <div style={{ width: 28, height: 28, border: '3px solid #F2B759', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+            <div style={{ width: 28, height: 28, border: '3px solid #315ED8', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
           </div>
         ) : groups.length === 0 ? (
-          <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E5E0D5', padding: '48px 24px', textAlign: 'center' }}>
+          <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '48px 24px', textAlign: 'center' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>📚</div>
             <p style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: '0 0 6px' }}>
               {isTeacher ? 'No classes yet' : 'No classes joined yet'}
@@ -66,8 +66,8 @@ export default function GroupsPage() {
               {isTeacher ? 'Create your first class to get started.' : 'Enter a join code to enroll in a class.'}
             </p>
             <Link href={isTeacher ? '/groups/create' : '/groups/join'} style={{
-              display: 'inline-block', padding: '9px 20px', background: '#0A4A3C',
-              color: '#F2B759', borderRadius: 999, fontSize: 13, fontWeight: 700, textDecoration: 'none',
+              display: 'inline-block', padding: '9px 20px', background: '#315ED8',
+              color: '#FFFFFF', borderRadius: 999, fontSize: 13, fontWeight: 700, textDecoration: 'none',
             }}>
               {isTeacher ? '+ Create Class' : '+ Join Class'}
             </Link>
@@ -76,13 +76,13 @@ export default function GroupsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
             {groups.map((g) => (
               <Link key={g._id} href={`/groups/${g._id}`} style={{ textDecoration: 'none' }}>
-                <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E5E0D5', padding: '18px 20px', cursor: 'pointer' }}>
+                <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '18px 20px', cursor: 'pointer' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: 10, background: '#0A4A3C', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 10, background: '#315ED8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <span style={{ fontSize: 18 }}>📚</span>
                     </div>
                     {isTeacher && (
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 8, background: 'rgba(242,183,89,0.15)', color: '#92651a', letterSpacing: '0.5px' }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 8, background: 'rgba(49,94,216,0.15)', color: '#92651a', letterSpacing: '0.5px' }}>
                         {g.joinCode}
                       </span>
                     )}
@@ -93,7 +93,7 @@ export default function GroupsPage() {
                     <span style={{ fontSize: 12, color: '#6B7280' }}>
                       {isTeacher ? `${g.students.length} students` : `by ${g.teacherName}`}
                     </span>
-                    <span style={{ fontSize: 12, color: '#0A4A3C', fontWeight: 600 }}>View →</span>
+                    <span style={{ fontSize: 12, color: '#315ED8', fontWeight: 600 }}>View →</span>
                   </div>
                 </div>
               </Link>

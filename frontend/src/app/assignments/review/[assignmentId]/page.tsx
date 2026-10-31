@@ -40,8 +40,8 @@ interface Submission {
 
 const statusColors: Record<string, { bg: string; color: string }> = {
   submitted:    { bg: '#EFF6FF', color: '#1D4ED8' },
-  under_review: { bg: 'rgba(242,183,89,0.15)', color: '#92651a' },
-  graded:       { bg: 'rgba(10,74,60,0.08)', color: '#0A4A3C' },
+  under_review: { bg: 'rgba(49,94,216,0.15)', color: '#92651a' },
+  graded:       { bg: 'rgba(49,94,216,0.08)', color: '#315ED8' },
 };
 
 export default function ReviewSubmissionsPage() {
@@ -127,7 +127,7 @@ export default function ReviewSubmissionsPage() {
   const s = { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' };
 
   return (
-    <div style={{ ...s, background: '#F5F0E8', minHeight: '100vh' }}>
+    <div style={{ ...s, background: '#F7F5EF', minHeight: '100vh' }}>
       <Topbar title="Submissions" />
 
       <div style={{ maxWidth: 780, margin: '0 auto', padding: '28px 24px' }}>
@@ -137,7 +137,7 @@ export default function ReviewSubmissionsPage() {
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
           <div>
-            <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0A4A3C', margin: '0 0 2px' }}>Student Submissions</h1>
+            <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 2px' }}>Student Submissions</h1>
             <p style={{ fontSize: 13, color: '#6B7280', margin: 0 }}>{submissions.length} student{submissions.length !== 1 ? 's' : ''} submitted</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -149,21 +149,21 @@ export default function ReviewSubmissionsPage() {
 
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
-            <div style={{ width: 28, height: 28, border: '3px solid #F2B759', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+            <div style={{ width: 28, height: 28, border: '3px solid #315ED8', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
           </div>
         ) : submissions.length === 0 ? (
-          <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E5E0D5', padding: '48px 24px', textAlign: 'center' }}>
+          <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '48px 24px', textAlign: 'center' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>📭</div>
             <p style={{ fontSize: 14, color: '#6B7280', margin: 0 }}>No submissions yet</p>
           </div>
         ) : (
           submissions.map((sub) => (
-            <div key={sub._id} style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E5E0D5', padding: '18px 20px', marginBottom: 12 }}>
+            <div key={sub._id} style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '18px 20px', marginBottom: 12 }}>
               {/* Submission header */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#0A4A3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#F2B759', flexShrink: 0 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#315ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#FFFFFF', flexShrink: 0 }}>
                     {sub.studentName[0].toUpperCase()}
                   </div>
                   <div>
@@ -175,7 +175,7 @@ export default function ReviewSubmissionsPage() {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   {sub.status === 'graded' && (
-                    <span style={{ fontSize: 14, fontWeight: 700, color: '#0A4A3C' }}>{sub.grade}/{sub.maxGrade}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: '#315ED8' }}>{sub.grade}/{sub.maxGrade}</span>
                   )}
                   <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 20, fontWeight: 600, ...statusColors[sub.status] }}>
                     {sub.status.replace('_', ' ')}
@@ -202,10 +202,10 @@ export default function ReviewSubmissionsPage() {
 
               {/* AI Evaluation results */}
               {evaluation && gradingId === sub._id && (
-                <div style={{ background: 'rgba(10,74,60,0.04)', border: '0.5px solid rgba(10,74,60,0.2)', borderRadius: 10, padding: '14px 16px', marginBottom: 14 }}>
+                <div style={{ background: 'rgba(49,94,216,0.04)', border: '0.5px solid rgba(49,94,216,0.2)', borderRadius: 10, padding: '14px 16px', marginBottom: 14 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                     <span style={{ fontSize: 13 }}>🤖</span>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#0A4A3C' }}>AI Evaluation Result</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#315ED8' }}>AI Evaluation Result</span>
                     <span style={{ fontSize: 12, fontWeight: 700, color: evaluation.percentage >= 75 ? '#059669' : evaluation.percentage >= 50 ? '#92651a' : '#DC2626', marginLeft: 'auto' }}>
                       {evaluation.totalMarks}/{evaluation.maxMarks} ({evaluation.percentage}%)
                     </span>
@@ -241,33 +241,33 @@ export default function ReviewSubmissionsPage() {
 
               {/* Grading form */}
               {gradingId === sub._id ? (
-                <div style={{ background: '#F9F7F5', borderRadius: 10, padding: 14, border: '0.5px solid #E5E0D5' }}>
+                <div style={{ background: '#F9F7F5', borderRadius: 10, padding: 14, border: '0.5px solid #E2E5EC' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
                     <div>
                       <label style={{ fontSize: 11, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>Grade</label>
                       <input type="number" value={gradeForm.grade}
                         onChange={e => setGradeForm(f => ({ ...f, grade: e.target.value }))}
                         placeholder="e.g. 85"
-                        style={{ width: '100%', padding: '7px 10px', borderRadius: 7, border: '1px solid #E5E0D5', fontSize: 13, boxSizing: 'border-box' as const, outline: 'none' }} />
+                        style={{ width: '100%', padding: '7px 10px', borderRadius: 7, border: '1px solid #E2E5EC', fontSize: 13, boxSizing: 'border-box' as const, outline: 'none' }} />
                     </div>
                     <div>
                       <label style={{ fontSize: 11, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>Max Grade</label>
                       <input type="number" value={gradeForm.maxGrade}
                         onChange={e => setGradeForm(f => ({ ...f, maxGrade: e.target.value }))}
-                        style={{ width: '100%', padding: '7px 10px', borderRadius: 7, border: '1px solid #E5E0D5', fontSize: 13, boxSizing: 'border-box' as const, outline: 'none' }} />
+                        style={{ width: '100%', padding: '7px 10px', borderRadius: 7, border: '1px solid #E2E5EC', fontSize: 13, boxSizing: 'border-box' as const, outline: 'none' }} />
                     </div>
                   </div>
                   <textarea value={gradeForm.feedback}
                     onChange={e => setGradeForm(f => ({ ...f, feedback: e.target.value }))}
                     placeholder="Write feedback for the student…" rows={3}
-                    style={{ width: '100%', padding: '8px 10px', borderRadius: 7, border: '1px solid #E5E0D5', fontSize: 12, resize: 'none', marginBottom: 10, boxSizing: 'border-box' as const, outline: 'none' }} />
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: 7, border: '1px solid #E2E5EC', fontSize: 12, resize: 'none', marginBottom: 10, boxSizing: 'border-box' as const, outline: 'none' }} />
                   <div style={{ display: 'flex', gap: 8 }}>
                     <button onClick={() => handleGrade(sub._id)} disabled={saving || !gradeForm.grade}
-                      style={{ flex: 1, padding: '8px 0', borderRadius: 8, background: '#0A4A3C', color: '#F2B759', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                      style={{ flex: 1, padding: '8px 0', borderRadius: 8, background: '#315ED8', color: '#FFFFFF', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
                       {saving ? 'Saving…' : '✓ Save Grade'}
                     </button>
                     <button onClick={() => { setGradingId(null); setEvaluation(null); setGradeForm({ grade: '', maxGrade: '100', feedback: '' }); }}
-                      style={{ padding: '8px 16px', borderRadius: 8, background: '#fff', color: '#6B7280', fontSize: 13, border: '0.5px solid #E5E0D5', cursor: 'pointer' }}>
+                      style={{ padding: '8px 16px', borderRadius: 8, background: '#fff', color: '#6B7280', fontSize: 13, border: '0.5px solid #E2E5EC', cursor: 'pointer' }}>
                       Cancel
                     </button>
                   </div>
@@ -282,9 +282,9 @@ export default function ReviewSubmissionsPage() {
                       display: 'flex', alignItems: 'center', gap: 6,
                       fontSize: 12, fontWeight: 700,
                       padding: '7px 14px', borderRadius: 8,
-                      background: evaluatingId === sub._id ? '#F5F0E8' : 'rgba(242,183,89,0.15)',
+                      background: evaluatingId === sub._id ? '#F7F5EF' : 'rgba(49,94,216,0.15)',
                       color: evaluatingId === sub._id ? '#9CA3AF' : '#92651a',
-                      border: '0.5px solid rgba(242,183,89,0.4)',
+                      border: '0.5px solid rgba(49,94,216,0.4)',
                       cursor: evaluatingId === sub._id ? 'not-allowed' : 'pointer',
                     }}
                   >
@@ -303,7 +303,7 @@ export default function ReviewSubmissionsPage() {
                       setEvaluation(null);
                       setGradeForm({ grade: String(sub.grade || ''), maxGrade: String(sub.maxGrade || 100), feedback: sub.feedback || '' });
                     }}
-                    style={{ fontSize: 12, fontWeight: 600, color: '#0A4A3C', background: '#F5F0E8', border: 'none', borderRadius: 8, padding: '7px 14px', cursor: 'pointer' }}
+                    style={{ fontSize: 12, fontWeight: 600, color: '#315ED8', background: '#F7F5EF', border: 'none', borderRadius: 8, padding: '7px 14px', cursor: 'pointer' }}
                   >
                     {sub.status === 'graded' ? '✏️ Edit Grade' : '📝 Manual Grade'}
                   </button>

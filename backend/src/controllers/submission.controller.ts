@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { SubmissionModel } from '../models/Submission';
 import { AssignmentModel } from '../models/Assignment';
+import { canReadAssignment } from '../services/access.service';
 import { sendNotification } from '../services/notification.service';
 
 export async function submitAssignment(req: Request, res: Response) {
@@ -11,15 +12,21 @@ export async function submitAssignment(req: Request, res: Response) {
 
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-    const assignment = await AssignmentModel.findById(assignmentId).populate('groupId', 'teacherId name');
+    const assignment = await AssignmentModel.findById(assignmentId).populate('groupId', 'teacherId name students');
     if (!assignment) return res.status(404).json({ error: 'Assignment not found' });
 
+    if (!await canReadAssignment(req.user!, assignment)) return res.status(403).json({ error: 'Access denied' });
     const existing = await SubmissionModel.findOne({ assignmentId, studentId });
     if (existing) {
       existing.filePath = req.file.path;
       existing.fileName = req.file.originalname;
       existing.fileSize = req.file.size;
       existing.status = 'submitted';
+      existing.grade = undefined;
+      existing.maxGrade = undefined;
+      existing.feedback = undefined;
+      existing.gradedAt = undefined;
+      existing.gradedBy = undefined;
       await existing.save();
       return res.json({ submission: existing });
     }
@@ -55,6 +62,9 @@ export async function submitAssignment(req: Request, res: Response) {
 
 export async function getSubmissionsForAssignment(req: Request, res: Response) {
   try {
+    const assignment = await AssignmentModel.findById(req.params.assignmentId);
+    if (!assignment) return res.status(404).json({ error: 'Assignment not found' });
+    if (req.user!.role !== 'admin' && assignment.createdBy !== req.user!.userId) return res.status(403).json({ error: 'Access denied' });
     const submissions = await SubmissionModel.find({ assignmentId: req.params.assignmentId })
       .sort({ createdAt: -1 });
     res.json({ submissions });
@@ -82,6 +92,11 @@ export async function gradeSubmission(req: Request, res: Response) {
       return res.status(400).json({ error: 'grade and maxGrade are required' });
     }
 
+    const existing = await SubmissionModel.findById(req.params.submissionId);
+    if (!existing) return res.status(404).json({ error: 'Submission not found' });
+    const assignment = await AssignmentModel.findById(existing.assignmentId);
+    if (!assignment || (req.user!.role !== 'admin' && assignment.createdBy !== req.user!.userId)) return res.status(403).json({ error: 'Access denied' });
+    if (!Number.isFinite(Number(grade)) || !Number.isFinite(Number(maxGrade)) || Number(maxGrade) <= 0 || Number(grade) < 0 || Number(grade) > Number(maxGrade)) return res.status(400).json({ error: 'Invalid grade' });
     const submission = await SubmissionModel.findByIdAndUpdate(
       req.params.submissionId,
       { grade: Number(grade), maxGrade: Number(maxGrade), feedback, status: 'graded', gradedBy: req.user?.userId, gradedAt: new Date() },
@@ -105,9 +120,10 @@ export async function gradeSubmission(req: Request, res: Response) {
   }
 }
 
-export async function getAllSubmissions(_req: Request, res: Response) {
+export async function getAllSubmissions(req: Request, res: Response) {
   try {
-    const submissions = await SubmissionModel.find()
+    const assignments = await AssignmentModel.find({ createdBy: req.user!.userId }).select("_id");
+    const submissions = await SubmissionModel.find(req.user!.role === "admin" ? {} : { assignmentId: { $in: assignments.map(a => a._id) } })
       .populate('assignmentId', 'title subject grade')
       .sort({ createdAt: -1 }).limit(100);
     res.json({ submissions });

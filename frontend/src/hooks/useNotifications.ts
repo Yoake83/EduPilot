@@ -40,7 +40,7 @@ export function useNotifications(userId: string | undefined) {
   useEffect(() => {
     if (!mounted || !userId) return;
 
-    const ws = new WebSocket(`${WS_URL}/ws?userId=${userId}`);
+    const ws = new WebSocket(`${WS_URL}/ws?token=${encodeURIComponent(getToken() || "")}`);
     wsRef.current = ws;
 
     ws.onmessage = (event) => {

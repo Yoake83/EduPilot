@@ -62,20 +62,20 @@ export default function GroupDetailPage() {
   const s = { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' };
 
   if (loading) return (
-    <div style={{ ...s, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#F5F0E8' }}>
-      <div style={{ width: 28, height: 28, border: '3px solid #F2B759', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+    <div style={{ ...s, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#F7F5EF' }}>
+      <div style={{ width: 28, height: 28, border: '3px solid #315ED8', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
 
   if (!group) return (
-    <div style={{ ...s, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#F5F0E8' }}>
+    <div style={{ ...s, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#F7F5EF' }}>
       <p style={{ color: '#6B7280' }}>Group not found.</p>
     </div>
   );
 
   return (
-    <div style={{ ...s, background: '#F5F0E8', minHeight: '100vh' }}>
+    <div style={{ ...s, background: '#F7F5EF', minHeight: '100vh' }}>
       <Topbar
         title={`Groups / ${group.name}`}
         action={isTeacher ? { label: '+ Add Assignment', href: `/assignments/create?groupId=${group._id}` } : undefined}
@@ -87,20 +87,20 @@ export default function GroupDetailPage() {
         </div>
 
         {/* Header card */}
-        <div style={{ background: '#0A4A3C', borderRadius: 16, padding: '24px 28px', marginBottom: 24, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 20 }}>
+        <div style={{ background: '#315ED8', borderRadius: 16, padding: '24px 28px', marginBottom: 24, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 20 }}>
           <div>
-            <p style={{ fontSize: 11, color: 'rgba(242,183,89,0.7)', margin: '0 0 4px', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{group.subject}</p>
+            <p style={{ fontSize: 11, color: 'rgba(49,94,216,0.7)', margin: '0 0 4px', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{group.subject}</p>
             <h1 style={{ fontSize: 22, fontWeight: 700, color: '#fff', margin: '0 0 6px' }}>{group.name}</h1>
             {group.description && <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', margin: '0 0 10px' }}>{group.description}</p>}
             <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', margin: 0 }}>by {group.teacherName} · {group.students.length} students</p>
           </div>
           {isTeacher && (
             <div style={{ textAlign: 'center', flexShrink: 0 }}>
-              <p style={{ fontSize: 10, color: 'rgba(242,183,89,0.7)', margin: '0 0 4px', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>Join Code</p>
-              <div style={{ background: 'rgba(242,183,89,0.15)', border: '1px solid rgba(242,183,89,0.3)', borderRadius: 10, padding: '8px 16px', marginBottom: 6 }}>
-                <span style={{ fontSize: 22, fontWeight: 700, color: '#F2B759', letterSpacing: '4px' }}>{group.joinCode}</span>
+              <p style={{ fontSize: 10, color: 'rgba(49,94,216,0.7)', margin: '0 0 4px', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>Join Code</p>
+              <div style={{ background: 'rgba(49,94,216,0.15)', border: '1px solid rgba(49,94,216,0.3)', borderRadius: 10, padding: '8px 16px', marginBottom: 6 }}>
+                <span style={{ fontSize: 22, fontWeight: 700, color: '#FFFFFF', letterSpacing: '4px' }}>{group.joinCode}</span>
               </div>
-              <button onClick={copyCode} style={{ fontSize: 11, color: copied ? '#F2B759' : 'rgba(255,255,255,0.5)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
+              <button onClick={copyCode} style={{ fontSize: 11, color: copied ? '#FFFFFF' : 'rgba(255,255,255,0.5)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
                 {copied ? '✓ Copied!' : 'Copy code'}
               </button>
             </div>
@@ -109,19 +109,19 @@ export default function GroupDetailPage() {
 
         {/* Tabs + Discussion link */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
-          <div style={{ display: 'flex', gap: 4, background: '#fff', borderRadius: 10, padding: 4, border: '0.5px solid #E5E0D5', width: 'fit-content' }}>
+          <div style={{ display: 'flex', gap: 4, background: '#fff', borderRadius: 10, padding: 4, border: '0.5px solid #E2E5EC', width: 'fit-content' }}>
             {(['assignments', 'students'] as const).map((t) => (
               <button key={t} onClick={() => setTab(t)} style={{
                 padding: '7px 18px', borderRadius: 7, fontSize: 13, fontWeight: 600,
                 border: 'none', cursor: 'pointer', textTransform: 'capitalize' as const,
-                background: tab === t ? '#0A4A3C' : 'transparent',
-                color: tab === t ? '#F2B759' : '#6B7280',
+                background: tab === t ? '#315ED8' : 'transparent',
+                color: tab === t ? '#FFFFFF' : '#6B7280',
               }}>
                 {t} {t === 'assignments' ? `(${assignments.length})` : `(${group.students.length})`}
               </button>
             ))}
           </div>
-          <Link href={`/groups/${id}/forum`} style={{ padding: '7px 14px', background: '#F5F0E8', color: '#0A4A3C', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>
+          <Link href={`/groups/${id}/forum`} style={{ padding: '7px 14px', background: '#F7F5EF', color: '#315ED8', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>
             💬 Discussion
           </Link>
         </div>
@@ -129,20 +129,20 @@ export default function GroupDetailPage() {
         {/* Assignments tab */}
         {tab === 'assignments' && (
           assignments.length === 0 ? (
-            <div style={{ background: '#fff', borderRadius: 12, border: '0.5px solid #E5E0D5', padding: '40px 24px', textAlign: 'center' }}>
+            <div style={{ background: '#fff', borderRadius: 12, border: '0.5px solid #E2E5EC', padding: '40px 24px', textAlign: 'center' }}>
               <p style={{ fontSize: 14, color: '#6B7280', margin: '0 0 12px' }}>No assignments yet.</p>
               {isTeacher && (
-                <Link href={`/assignments/create?groupId=${group._id}`} style={{ display: 'inline-block', padding: '8px 18px', background: '#0A4A3C', color: '#F2B759', borderRadius: 999, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>+ Add Assignment</Link>
+                <Link href={`/assignments/create?groupId=${group._id}`} style={{ display: 'inline-block', padding: '8px 18px', background: '#315ED8', color: '#FFFFFF', borderRadius: 999, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>+ Add Assignment</Link>
               )}
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {assignments.map((a) => {
                 const isOverdue = new Date(a.dueDate) < new Date();
-                const statusBg: Record<string, string> = { completed: 'rgba(10,74,60,0.08)', pending: 'rgba(242,183,89,0.15)', processing: '#EFF6FF', failed: '#FEF2F2' };
-                const statusColor: Record<string, string> = { completed: '#0A4A3C', pending: '#92651a', processing: '#1D4ED8', failed: '#DC2626' };
+                const statusBg: Record<string, string> = { completed: 'rgba(49,94,216,0.08)', pending: 'rgba(49,94,216,0.15)', processing: '#EFF6FF', failed: '#FEF2F2' };
+                const statusColor: Record<string, string> = { completed: '#315ED8', pending: '#92651a', processing: '#1D4ED8', failed: '#DC2626' };
                 return (
-                  <div key={a._id} style={{ background: '#fff', borderRadius: 10, border: '0.5px solid #E5E0D5', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div key={a._id} style={{ background: '#fff', borderRadius: 10, border: '0.5px solid #E2E5EC', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: 14, fontWeight: 600, color: '#111', margin: '0 0 3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.title}</p>
                       <p style={{ fontSize: 11, color: isOverdue ? '#DC2626' : '#9CA3AF', margin: 0 }}>Due {new Date(a.dueDate).toLocaleDateString()}</p>
@@ -151,11 +151,11 @@ export default function GroupDetailPage() {
                       {a.status}
                     </span>
                     <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                      <Link href={`/assignments/${a._id}`} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8, background: '#F5F0E8', color: '#0A4A3C', textDecoration: 'none' }}>View</Link>
+                      <Link href={`/assignments/${a._id}`} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8, background: '#F7F5EF', color: '#315ED8', textDecoration: 'none' }}>View</Link>
                       {isTeacher ? (
-                        <Link href={`/assignments/review/${a._id}`} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8, background: '#0A4A3C', color: '#F2B759', textDecoration: 'none' }}>Submissions</Link>
+                        <Link href={`/assignments/review/${a._id}`} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8, background: '#315ED8', color: '#FFFFFF', textDecoration: 'none' }}>Submissions</Link>
                       ) : (
-                        <Link href={`/assignments/submit/${a._id}`} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8, background: '#0A4A3C', color: '#F2B759', textDecoration: 'none' }}>Submit</Link>
+                        <Link href={`/assignments/submit/${a._id}`} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8, background: '#315ED8', color: '#FFFFFF', textDecoration: 'none' }}>Submit</Link>
                       )}
                     </div>
                   </div>
@@ -168,15 +168,15 @@ export default function GroupDetailPage() {
         {/* Students tab */}
         {tab === 'students' && (
           group.students.length === 0 ? (
-            <div style={{ background: '#fff', borderRadius: 12, border: '0.5px solid #E5E0D5', padding: '40px 24px', textAlign: 'center' }}>
+            <div style={{ background: '#fff', borderRadius: 12, border: '0.5px solid #E2E5EC', padding: '40px 24px', textAlign: 'center' }}>
               <p style={{ fontSize: 14, color: '#6B7280', margin: 0 }}>No students yet. Share the join code!</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {group.students.map((st) => (
-                <div key={st.userId} style={{ background: '#fff', borderRadius: 10, border: '0.5px solid #E5E0D5', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#0A4A3C', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#F2B759' }}>{st.name[0].toUpperCase()}</span>
+                <div key={st.userId} style={{ background: '#fff', borderRadius: 10, border: '0.5px solid #E2E5EC', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#315ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#FFFFFF' }}>{st.name[0].toUpperCase()}</span>
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ fontSize: 13, fontWeight: 600, color: '#111', margin: 0 }}>{st.name}</p>

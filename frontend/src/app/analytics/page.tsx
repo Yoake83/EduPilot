@@ -9,7 +9,7 @@ import { Topbar } from '@/components/Topbar';
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 // ── Mini bar chart ────────────────────────────────────────────────────────────
-function BarChart({ data, color = '#0A4A3C' }: { data: { label: string; value: number }[]; color?: string }) {
+function BarChart({ data, color = '#315ED8' }: { data: { label: string; value: number }[]; color?: string }) {
   const max = Math.max(...data.map(d => d.value), 1);
   return (
     <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 120, padding: '0 4px' }}>
@@ -25,7 +25,7 @@ function BarChart({ data, color = '#0A4A3C' }: { data: { label: string; value: n
 }
 
 // ── Horizontal bar ─────────────────────────────────────────────────────────────
-function HBar({ label, value, max, color = '#0A4A3C', suffix = '%' }: { label: string; value: number; max: number; color?: string; suffix?: string }) {
+function HBar({ label, value, max, color = '#315ED8', suffix = '%' }: { label: string; value: number; max: number; color?: string; suffix?: string }) {
   const pct = max > 0 ? (value / max) * 100 : 0;
   return (
     <div style={{ marginBottom: 10 }}>
@@ -33,7 +33,7 @@ function HBar({ label, value, max, color = '#0A4A3C', suffix = '%' }: { label: s
         <span style={{ fontSize: 12, color: '#374151', fontWeight: 500 }}>{label}</span>
         <span style={{ fontSize: 12, color, fontWeight: 700 }}>{value}{suffix}</span>
       </div>
-      <div style={{ height: 8, background: '#F5F0E8', borderRadius: 999, overflow: 'hidden' }}>
+      <div style={{ height: 8, background: '#F7F5EF', borderRadius: 999, overflow: 'hidden' }}>
         <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 999, transition: 'width 0.6s ease' }} />
       </div>
     </div>
@@ -51,7 +51,7 @@ function DonutChart({ data }: { data: { label: string; value: number; color: str
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
       <svg width="120" height="120" viewBox="0 0 120 120">
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#F5F0E8" strokeWidth="18" />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#F7F5EF" strokeWidth="18" />
         {data.map((d, i) => {
           if (d.value === 0) return null;
           const pct = d.value / total;
@@ -68,7 +68,7 @@ function DonutChart({ data }: { data: { label: string; value: number; color: str
           offset += pct;
           return seg;
         })}
-        <text x={cx} y={cy - 4} textAnchor="middle" fontSize="16" fontWeight="700" fill="#0A4A3C">{total}</text>
+        <text x={cx} y={cy - 4} textAnchor="middle" fontSize="16" fontWeight="700" fill="#315ED8">{total}</text>
         <text x={cx} y={cy + 12} textAnchor="middle" fontSize="9" fill="#9CA3AF">total</text>
       </svg>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -84,12 +84,12 @@ function DonutChart({ data }: { data: { label: string; value: number; color: str
 }
 
 // ── Stat card ─────────────────────────────────────────────────────────────────
-function StatCard({ label, value, sub, color = '#0A4A3C' }: { label: string; value: string | number; sub?: string; color?: string }) {
+function StatCard({ label, value, sub, color = '#315ED8' }: { label: string; value: string | number; sub?: string; color?: string }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 12, padding: '16px 18px', border: '0.5px solid #E5E0D5' }}>
+    <div style={{ background: '#fff', borderRadius: 12, padding: '16px 18px', border: '0.5px solid #E2E5EC' }}>
       <p style={{ fontSize: 11, color: '#9CA3AF', margin: '0 0 6px', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{label}</p>
       <p style={{ fontSize: 26, fontWeight: 700, color, margin: '0 0 2px' }}>{value ?? '—'}</p>
-      {sub && <p style={{ fontSize: 11, color: '#F2B759', margin: 0, fontWeight: 600 }}>{sub}</p>}
+      {sub && <p style={{ fontSize: 11, color: '#A36D1A', margin: 0, fontWeight: 600 }}>{sub}</p>}
     </div>
   );
 }
@@ -97,8 +97,8 @@ function StatCard({ label, value, sub, color = '#0A4A3C' }: { label: string; val
 // ── Section wrapper ───────────────────────────────────────────────────────────
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E5E0D5', padding: '20px 24px', marginBottom: 16 }}>
-      <h2 style={{ fontSize: 14, fontWeight: 700, color: '#0A4A3C', margin: '0 0 18px' }}>{title}</h2>
+    <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '20px 24px', marginBottom: 16 }}>
+      <h2 style={{ fontSize: 14, fontWeight: 700, color: '#315ED8', margin: '0 0 18px' }}>{title}</h2>
       {children}
     </div>
   );
@@ -130,7 +130,7 @@ function TeacherAnalytics() {
         <StatCard label="Total Groups" value={overview.totalGroups} sub="active classes" />
         <StatCard label="Total Students" value={overview.totalStudents} sub="across all groups" />
         <StatCard label="Assignments" value={overview.totalAssignments} sub={`${overview.totalSubmissions} submissions`} />
-        <StatCard label="Avg Grade" value={overview.overallAvgGrade !== null ? `${overview.overallAvgGrade}%` : '—'} sub={`${overview.submissionRate}% submission rate`} color="#F2B759" />
+        <StatCard label="Avg Grade" value={overview.overallAvgGrade !== null ? `${overview.overallAvgGrade}%` : '—'} sub={`${overview.submissionRate}% submission rate`} color="#A36D1A" />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
@@ -138,7 +138,7 @@ function TeacherAnalytics() {
         <Section title="📈 Submissions This Week">
           <BarChart
             data={submissionsOverTime.map((d: any) => ({ label: d.day, value: d.count }))}
-            color="#0A4A3C"
+            color="#315ED8"
           />
         </Section>
 
@@ -146,8 +146,8 @@ function TeacherAnalytics() {
         <Section title="🎯 Grade Distribution">
           <DonutChart data={[
             { label: '90–100%', value: gradeDistribution.find((d: any) => d.range === '90-100')?.count || 0, color: '#059669' },
-            { label: '75–89%',  value: gradeDistribution.find((d: any) => d.range === '75-89')?.count || 0,  color: '#0A4A3C' },
-            { label: '60–74%',  value: gradeDistribution.find((d: any) => d.range === '60-74')?.count || 0,  color: '#F2B759' },
+            { label: '75–89%',  value: gradeDistribution.find((d: any) => d.range === '75-89')?.count || 0,  color: '#315ED8' },
+            { label: '60–74%',  value: gradeDistribution.find((d: any) => d.range === '60-74')?.count || 0,  color: '#A36D1A' },
             { label: '40–59%',  value: gradeDistribution.find((d: any) => d.range === '40-59')?.count || 0,  color: '#F59E0B' },
             { label: '0–39%',   value: gradeDistribution.find((d: any) => d.range === '0-39')?.count || 0,   color: '#DC2626' },
           ]} />
@@ -160,7 +160,7 @@ function TeacherAnalytics() {
           <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>No assignments yet</p>
         ) : (
           submissionsByAssignment.map((a: any) => (
-            <HBar key={a._id} label={a.title} value={a.submissionRate} max={100} color={a.submissionRate >= 75 ? '#059669' : a.submissionRate >= 50 ? '#F2B759' : '#DC2626'} />
+            <HBar key={a._id} label={a.title} value={a.submissionRate} max={100} color={a.submissionRate >= 75 ? '#059669' : a.submissionRate >= 50 ? '#A36D1A' : '#DC2626'} />
           ))
         )}
       </Section>
@@ -173,8 +173,8 @@ function TeacherAnalytics() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {groupStats.map((g: any) => (
               <Link key={g._id} href={`/groups/${g._id}`} style={{ textDecoration: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#F9F7F5', borderRadius: 10, border: '0.5px solid #E5E0D5' }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#0A4A3C', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: '#F9F7F5', borderRadius: 10, border: '0.5px solid #E2E5EC' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#315ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <span style={{ fontSize: 14 }}>📚</span>
                   </div>
                   <div style={{ flex: 1 }}>
@@ -182,7 +182,7 @@ function TeacherAnalytics() {
                     <p style={{ fontSize: 11, color: '#6B7280', margin: '2px 0 0' }}>{g.subject} · {g.students} students · {g.assignments} assignments</p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontSize: 14, fontWeight: 700, color: g.avgGrade !== null ? '#0A4A3C' : '#9CA3AF', margin: 0 }}>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: g.avgGrade !== null ? '#315ED8' : '#9CA3AF', margin: 0 }}>
                       {g.avgGrade !== null ? `${g.avgGrade}%` : '—'}
                     </p>
                     <p style={{ fontSize: 10, color: '#9CA3AF', margin: '2px 0 0' }}>avg grade</p>
@@ -217,7 +217,7 @@ function StudentAnalytics() {
   const { overview, assignmentPerformance, gradeTrend } = data;
 
   const statusColors: Record<string, string> = {
-    graded: '#059669', submitted: '#0A4A3C', under_review: '#F2B759', not_submitted: '#DC2626',
+    graded: '#059669', submitted: '#315ED8', under_review: '#A36D1A', not_submitted: '#DC2626',
   };
 
   return (
@@ -226,7 +226,7 @@ function StudentAnalytics() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
         <StatCard label="Enrolled Classes" value={overview.enrolledClasses} sub="active groups" />
         <StatCard label="Assignments" value={overview.totalAssignments} sub={`${overview.submitted} submitted`} />
-        <StatCard label="Avg Grade" value={overview.avgGrade !== null ? `${overview.avgGrade}%` : '—'} sub={`${overview.graded} graded`} color="#F2B759" />
+        <StatCard label="Avg Grade" value={overview.avgGrade !== null ? `${overview.avgGrade}%` : '—'} sub={`${overview.graded} graded`} color="#A36D1A" />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
@@ -234,7 +234,7 @@ function StudentAnalytics() {
         <Section title="📊 Submission Status">
           <DonutChart data={[
             { label: 'Graded', value: overview.graded, color: '#059669' },
-            { label: 'Submitted', value: overview.submitted - overview.graded, color: '#0A4A3C' },
+            { label: 'Submitted', value: overview.submitted - overview.graded, color: '#315ED8' },
             { label: 'Pending', value: overview.pending, color: '#DC2626' },
           ]} />
         </Section>
@@ -246,7 +246,7 @@ function StudentAnalytics() {
           ) : (
             <BarChart
               data={gradeTrend.map((d: any) => ({ label: d.label, value: d.percentage }))}
-              color="#F2B759"
+              color="#A36D1A"
             />
           )}
         </Section>
@@ -259,14 +259,14 @@ function StudentAnalytics() {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {assignmentPerformance.map((a: any, i: number) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#F9F7F5', borderRadius: 10, border: '0.5px solid #E5E0D5' }}>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#F9F7F5', borderRadius: 10, border: '0.5px solid #E2E5EC' }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: 13, fontWeight: 600, color: '#111', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.title}</p>
                   <p style={{ fontSize: 11, color: '#6B7280', margin: '2px 0 0' }}>{a.subject} · Due {new Date(a.dueDate).toLocaleDateString()}</p>
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
                   {a.percentage !== null ? (
-                    <p style={{ fontSize: 14, fontWeight: 700, color: a.percentage >= 75 ? '#059669' : a.percentage >= 50 ? '#F2B759' : '#DC2626', margin: 0 }}>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: a.percentage >= 75 ? '#059669' : a.percentage >= 50 ? '#A36D1A' : '#DC2626', margin: 0 }}>
                       {a.percentage}%
                     </p>
                   ) : (
@@ -290,10 +290,10 @@ export default function AnalyticsPage() {
   const isTeacher = user?.role === 'teacher' || user?.role === 'admin';
 
   return (
-    <div style={{ background: '#F5F0E8', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+    <div style={{ background: '#F7F5EF', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
       <Topbar title="Analytics" />
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '28px 24px' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0A4A3C', margin: '0 0 4px' }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 4px' }}>
           {isTeacher ? '📊 Teaching Analytics' : '📊 My Progress'}
         </h1>
         <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 24px' }}>
