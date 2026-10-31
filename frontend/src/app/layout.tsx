@@ -19,13 +19,13 @@ export default function RootLayout({
         style={{
           margin: 0,
           padding: 0,
-          background: '#F3F3F3',
+          background: '#F7F5EF',
         }}
       >
         <AuthProvider>
           <div className="flex h-screen overflow-hidden">
             <ConditionalSidebar />
-            <main className="flex-1 overflow-auto">
+            <main className="app-main flex-1 overflow-auto">
               {children}
             </main>
           </div>
