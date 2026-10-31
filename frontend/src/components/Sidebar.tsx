@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { Brand } from '@/components/Brand';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 export default function Sidebar() {
@@ -17,7 +18,7 @@ export default function Sidebar() {
  ];
  const initials = user?.name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() || 'E';
  return <aside className="app-sidebar">
-  <Link href="/home" className="brand"><span className="brand-mark">E<span>✦</span></span><span>EduPilot<small>A little more possibility.</small></span></Link>
+  <Link href="/home" className="sidebar-brand"><Brand/></Link>
   <p className="nav-caption">YOUR WORKSPACE</p>
   <nav aria-label="Main navigation" className="main-nav">{items.map(item => {
    const active = pathname === item.href || pathname.startsWith(item.href + '/');

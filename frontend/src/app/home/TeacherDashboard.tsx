@@ -1,136 +1,44 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { authHeaders } from '@/hooks/useApi';
 import { Topbar } from '@/components/Topbar';
-
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-
-interface Group { _id: string; name: string; subject: string; joinCode: string; students: any[]; }
-interface Assignment { _id: string; title: string; subject: string; status: string; dueDate: string; groupId?: { name: string }; }
-
-export default function TeacherDashboard() {
-  const { user } = useAuth();
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    const headers = authHeaders();
-    Promise.all([
-      fetch(`${API}/api/groups`, { headers }).then(r => r.json()),
-      fetch(`${API}/api/assignments`, { headers }).then(r => r.json()),
-    ]).then(([gData, aData]) => {
-      setGroups(gData.groups || []);
-      setAssignments(aData.assignments || []);
-      setLoading(false);
-    }).catch(() => setLoading(false));
-  }, [mounted]);
-
-  const totalStudents = groups.reduce((sum, g) => sum + g.students.length, 0);
-  const completed = assignments.filter(a => a.status === 'completed').length;
-  const s = { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' };
-
-  return (
-    <div className="dashboard-page" style={{ ...s, background: '#F7F5EF', minHeight: '100vh' }}>
-      <Topbar title="Dashboard" action={{ label: '✦ Create Assignment', href: '/assignments/create' }} />
-
-      <div className="dashboard-content">
-        <section className="welcome-panel reveal"><div className="welcome-copy"><span className="eyebrow">YOUR LEARNING SPACE</span><p className="welcome-greeting">Welcome back, {user?.name?.split(' ')[0] || 'there'}</p><h1>A good day to inspire.</h1><p>A clear view of your classes. More space for what matters.</p><Link className="button button-primary" href="/assignments/create">Create something inspiring <span aria-hidden="true">↗</span></Link></div><div className="welcome-art" aria-hidden="true"><div className="orbit orbit-one"/><div className="orbit orbit-two"/><div className="art-spark">✦</div><div className="art-card"><span>Small steps.</span><strong>Bright futures.</strong><div className="art-lines"><i/><i/><i/></div></div><span className="art-dot"/></div></section>
-
-        {/* Stats */}
-        <div className="dashboard-stats reveal">
-          {[
-            { label: 'My Groups', value: groups.length, sub: 'active classes', link: '/groups' },
-            { label: 'Total Students', value: totalStudents, sub: 'across all groups', link: '/groups' },
-            { label: 'Assignments', value: assignments.length, sub: `${completed} completed`, link: '/assignments' },
-          ].map(({ label, value, sub, link }) => (
-            <Link key={label} href={link} style={{ textDecoration: 'none' }}>
-              <div className="stat-card">
-                <p style={{ fontSize: 12, color: '#69758A', margin: '0 0 4px', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{label}</p>
-                <p style={{ fontSize: 28, fontWeight: 700, color: '#315ED8', margin: '0 0 2px' }}>{loading ? '—' : value}</p>
-                <p style={{ fontSize: 12, color: '#315ED8', margin: 0, fontWeight: 600 }}>{sub}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Groups */}
-        <div className="dashboard-section reveal" style={{ marginBottom: 28 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-            <h2 style={{ fontSize: 19, fontWeight: 700, color: '#111', margin: 0 }}>My Groups</h2>
-            <Link href="/groups" style={{ fontSize: 12, color: '#315ED8', fontWeight: 600, textDecoration: 'none' }}>View all →</Link>
-          </div>
-          {loading ? <p style={{ fontSize: 13, color: '#9CA3AF' }}>Loading…</p> :
-            groups.length === 0 ? (
-              <div className="interactive-card" style={{ background: '#fff', borderRadius: 12, border: '0.5px solid #E2E5EC', padding: '32px 24px', textAlign: 'center' }}>
-                <p style={{ fontSize: 14, color: '#6B7280', margin: '0 0 12px' }}>No groups yet. Create your first class!</p>
-                <Link href="/groups/create" style={{ display: 'inline-block', padding: '8px 18px', background: '#315ED8', color: '#FFFFFF', borderRadius: 999, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>+ Create Group</Link>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 10 }}>
-                {groups.slice(0, 4).map((g) => (
-                  <Link key={g._id} href={`/groups/${g._id}`} style={{ textDecoration: 'none' }}>
-                    <div className="interactive-card" style={{ background: '#fff', borderRadius: 12, border: '0.5px solid #E2E5EC', padding: '14px 16px' }}>
-                      <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(49,94,216,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
-                        <span style={{ fontSize: 16 }}>📚</span>
-                      </div>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: '#111', margin: '0 0 2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{g.name}</p>
-                      <p style={{ fontSize: 12, color: '#6B7280', margin: '0 0 8px' }}>{g.subject}</p>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: 12, color: '#6B7280' }}>{g.students.length} students</span>
-                        <span style={{ fontSize: 12, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: 'rgba(49,94,216,0.08)', color: '#315ED8' }}>{g.joinCode}</span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-        </div>
-
-        {/* Recent Assignments */}
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-            <h2 style={{ fontSize: 19, fontWeight: 700, color: '#111', margin: 0 }}>Recent Assignments</h2>
-            <Link href="/assignments" style={{ fontSize: 12, color: '#315ED8', fontWeight: 600, textDecoration: 'none' }}>View all →</Link>
-          </div>
-          {loading ? <p style={{ fontSize: 13, color: '#9CA3AF' }}>Loading…</p> :
-            assignments.length === 0 ? (
-              <div className="interactive-card" style={{ background: '#fff', borderRadius: 12, border: '0.5px solid #E2E5EC', padding: '24px', textAlign: 'center' }}>
-                <p style={{ fontSize: 13, color: '#6B7280', margin: 0 }}>No assignments yet.</p>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {assignments.slice(0, 5).map((a) => {
-                  const statusColor: Record<string, string> = { completed: '#315ED8', pending: '#92651a', processing: '#1D4ED8', failed: '#DC2626' };
-                  const statusBg: Record<string, string> = { completed: 'rgba(49,94,216,0.08)', pending: 'rgba(49,94,216,0.15)', processing: '#EFF6FF', failed: '#FEF2F2' };
-                  return (
-                    <Link key={a._id} href={`/assignments/${a._id}`} style={{ textDecoration: 'none' }}>
-                      <div className="assignment-row interactive-card" style={{ background: '#fff', borderRadius: 10, border: '0.5px solid #E2E5EC', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(49,94,216,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <span style={{ fontSize: 14 }}>📄</span>
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ fontSize: 13, fontWeight: 600, color: '#111', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.title}</p>
-                          <p style={{ fontSize: 12, color: '#69758A', margin: '2px 0 0' }}>{a.groupId?.name || 'No group'} · Due {new Date(a.dueDate).toLocaleDateString()}</p>
-                        </div>
-                        <span style={{ fontSize: 12, fontWeight: 600, padding: '2px 8px', borderRadius: 20, background: statusBg[a.status] || '#F3F4F6', color: statusColor[a.status] || '#6B7280', textTransform: 'capitalize' as const, flexShrink: 0 }}>
-                          {a.status}
-                        </span>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-        </div>
-      </div>
-    </div>
-  );
+interface Group { _id:string; name:string; subject:string; joinCode?:string; teacherName?:string; students?:unknown[]; }
+interface Assignment { _id:string; title:string; subject:string; status:string; dueDate:string; groupId?:{name:string}; }
+export default function TeacherDashboard() { return <DashboardView teacher/>; }
+export function DashboardView({ teacher=false }: { teacher?:boolean }) {
+ const { user } = useAuth();
+ const [groups,setGroups] = useState<Group[]>([]);
+ const [assignments,setAssignments] = useState<Assignment[]>([]);
+ const [loading,setLoading] = useState(true);
+ const [error,setError] = useState(false);
+ useEffect(() => {
+  const controller = new AbortController();
+  const get = async (path:string) => { const response=await fetch(`${API}/api/${path}`,{headers:authHeaders(),signal:controller.signal}); if(!response.ok) throw new Error('Unable to load'); return response.json(); };
+  Promise.all([get('groups'),get('assignments')]).then(([g,a]) => { setGroups(g.groups || []); setAssignments(a.assignments || []); }).catch(e => { if(e.name !== 'AbortError') setError(true); }).finally(() => { if(!controller.signal.aborted) setLoading(false); });
+  return () => controller.abort();
+ },[]);
+ const stats = teacher ? [
+  {label:'Your classes',value:groups.length,sub:'Spaces for big ideas',icon:'◫',link:'/groups'},
+  {label:'Students learning',value:groups.reduce((n,g)=>n+(g.students?.length || 0),0),sub:'A world of potential',icon:'◎',link:'/groups'},
+  {label:'Assignments',value:assignments.length,sub:`${assignments.filter(a=>a.status==='completed').length} ready to share`,icon:'↗',link:'/assignments'},
+ ] : [
+  {label:'Your classes',value:groups.length,sub:'Keep your curiosity going',icon:'◫',link:'/groups'},
+  {label:'Assignments',value:assignments.length,sub:'Your learning in motion',icon:'↗',link:'/assignments'},
+  {label:'Coming up',value:assignments.filter(a=>new Date(a.dueDate)>=new Date()).length,sub:'Make a little room',icon:'◷',link:'/assignments'},
+ ];
+ return <div className="dashboard-page cockpit-page"><Topbar title="Overview" action={{label:teacher?'+ Create assignment':'+ Join a class',href:teacher?'/assignments/create':'/groups/join'}}/>
+ <div className="cockpit-content">
+  <div className="page-intro reveal"><div><span className="eyebrow">A NEW DAY. A NEW POSSIBILITY.</span><h1>Hello, {user?.name?.split(' ')[0] || 'there'}<span className="greeting-star" aria-hidden="true">✳</span></h1><p>{teacher?'A little less admin. A lot more inspiration.':'Ready to see where your curiosity takes you?'}</p></div><span className="workspace-label"><i/> {teacher?'Teaching workspace':'Learning workspace'}</span></div>
+  <section className="flight-hero reveal"><div className="flight-copy"><span className="hero-label"><span aria-hidden="true">✦</span> YOUR NEXT CHAPTER</span><h2>{teacher?<>Great teaching<br/>starts with <em>you.</em></>:<>Big ideas begin<br/>with a little <em>curiosity.</em></>}</h2><p>{teacher?'Bring the spark. We’ll help with the preparation. Turn your next idea into a lesson worth remembering.':'Ask a question. Explore an idea. Your personal study space is ready for whatever comes next.'}</p><Link href={teacher?'/toolkit':'/study'} className="hero-button">{teacher?'Explore your AI toolkit':'Meet your study assistant'} <span aria-hidden="true">↗</span></Link><div className="hero-footnote"><span aria-hidden="true">◈</span> A thoughtful companion for every learning journey.</div></div><LearningArt/></section>
+  {error && <div role="alert" className="dashboard-error">We couldn’t load your workspace. Refresh the page to try again.</div>}
+  <div className="cockpit-stats reveal">{stats.map((stat,i)=><Link key={stat.label} href={stat.link} className={`cockpit-stat stat-tone-${i}`}><div className="stat-top"><span>{stat.label}</span><span className="stat-symbol" aria-hidden="true">{stat.icon}</span></div><strong>{loading?'—':stat.value.toString().padStart(2,'0')}</strong><div className="stat-bottom"><span>{stat.sub}</span><span aria-hidden="true">↗</span></div></Link>)}</div>
+  <div className="cockpit-columns"><section className="course-section reveal"><div className="section-heading"><div><span className="eyebrow">ROOM TO GROW</span><h2>Your classes<span className="section-count">{groups.length}</span></h2></div><Link href="/groups">View all <span aria-hidden="true">↗</span></Link></div>
+   {loading?<div className="course-skeleton" aria-label="Loading classes"/>:groups.length===0?<div className="empty-course"><div className="empty-books" aria-hidden="true"><i/><i/><i/></div><h3>{teacher?'Every great class starts somewhere.':'Your next chapter is waiting.'}</h3><p>{teacher?'Create a space for your students to connect, discover, and grow.':'Join your first class and make yourself at home.'}</p><Link className="button button-primary" href={teacher?'/groups/create':'/groups/join'}>{teacher?'+ Create your first class':'+ Join your first class'}</Link></div>:<div className="course-grid">{groups.slice(0,4).map((g,i)=><Link className={`course-card course-tone-${i%4}`} key={g._id} href={`/groups/${g._id}`}><div className="course-cover"><span className="course-subject">{g.subject}</span><div className="course-geometry" aria-hidden="true"><i/><i/><i/></div><span className="course-arrow" aria-hidden="true">↗</span></div><div className="course-info"><h3>{g.name}</h3><p>{teacher?`${g.students?.length || 0} students`:`With ${g.teacherName || 'your teacher'}`}<span>{teacher?g.joinCode:'Explore class'}</span></p></div></Link>)}</div>}
+  </section><section className="assignment-section reveal"><div className="section-heading"><div><span className="eyebrow">KEEP THINGS MOVING</span><h2>{teacher?'Recent work':'Your assignments'}</h2></div><Link href="/assignments">View all <span aria-hidden="true">↗</span></Link></div><div className="work-list">{loading?<div className="work-skeleton" aria-label="Loading assignments"/>:assignments.length===0?<div className="empty-work"><span aria-hidden="true">⌁</span><h3>A fresh page.</h3><p>{teacher?'Your assignments will find a home here. Start with a topic and let inspiration take over.':'New assignments will appear here when your teacher shares them.'}</p></div>:assignments.slice(0,5).map((a,i)=><Link className="work-item" href={teacher?`/assignments/${a._id}`:`/assignments/submit/${a._id}`} key={a._id}><span className={`work-number number-${i%3}`}>{String(i+1).padStart(2,'0')}</span><div><h3>{a.title}</h3><p>{a.groupId?.name || a.subject} · {new Date(a.dueDate).toLocaleDateString(undefined,{month:'short',day:'numeric'})}</p></div><span className={`work-status status-${a.status}`}>{teacher?a.status:'Open'}<span aria-hidden="true">↗</span></span></Link>)}</div><Link className="small-feature" href={teacher?'/analytics':'/library'}><span className="feature-icon" aria-hidden="true">{teacher?'◴':'▤'}</span><div><strong>{teacher?'See the bigger picture':'A home for your ideas'}</strong><p>{teacher?'Insights to help every student grow.':'Find your saved notes and materials.'}</p></div><span aria-hidden="true">↗</span></Link></section></div>
+  <footer className="dashboard-footer"><span>Made for curious minds.</span><span>Take a breath. You’re doing great. <span aria-hidden="true">✦</span></span></footer>
+ </div></div>;
 }
+function LearningArt(){return <div className="learning-art" aria-hidden="true"><svg viewBox="0 0 500 380" fill="none"><defs><linearGradient id="pageL" x1="130" y1="185" x2="270" y2="330" gradientUnits="userSpaceOnUse"><stop stopColor="#FFF5DA"/><stop offset="1" stopColor="#D9DCEC"/></linearGradient><linearGradient id="pageR" x1="267" y1="190" x2="400" y2="310" gradientUnits="userSpaceOnUse"><stop stopColor="#fff"/><stop offset="1" stopColor="#D9DCEC"/></linearGradient><linearGradient id="bookBlue" x1="120" y1="200" x2="350" y2="340" gradientUnits="userSpaceOnUse"><stop stopColor="#6D91F7"/><stop offset="1" stopColor="#315ED8"/></linearGradient></defs><g className="art-orbits"><circle cx="278" cy="208" r="157" stroke="#ffffff" strokeOpacity=".1"/><circle cx="278" cy="208" r="125" stroke="#ffffff" strokeOpacity=".08"/><path d="M54 216C105 46 367 5 437 203" stroke="#A9C1FF" strokeOpacity=".3" strokeDasharray="4 7"/></g><ellipse cx="269" cy="328" rx="147" ry="23" fill="#071328" fillOpacity=".4"/><g className="floating-book"><path d="M114 222L261 277L413 221L420 242L270 315L105 254L114 222Z" fill="#315ED8"/><path d="M111 215L262 265L411 213L410 234L263 295L111 241V215Z" fill="#9BAEDC"/><path d="M105 207L263 250L419 204L416 217L263 281L107 228L105 207Z" fill="url(#bookBlue)"/><path d="M263 252C225 211 178 194 118 193L127 151C187 145 226 168 263 208V252Z" fill="url(#pageL)"/><path d="M263 252C306 215 350 193 406 190L397 150C339 147 293 168 263 208V252Z" fill="url(#pageR)"/><path d="M263 209V252" stroke="#ADB6D1" strokeWidth="2"/><path d="M144 166C182 169 212 180 242 204M142 177C179 181 211 194 240 215M140 188C175 191 205 205 234 224" stroke="#B5B7C2" strokeWidth="2" strokeLinecap="round"/><path d="M284 208C313 185 342 175 377 170M284 219C315 198 346 186 379 181M291 228C319 211 348 199 382 194" stroke="#B5B7C2" strokeWidth="2" strokeLinecap="round"/><path d="M330 176L341 173L350 213L337 207L330 218L323 179L330 176Z" fill="#E8AB66"/></g><g className="flight-plane"><path d="M202 79L356 43L285 139L267 100L202 79Z" fill="#FAF4DE"/><path d="M356 43L267 100L258 130L277 118L267 100L356 43Z" fill="#BCCBED"/><path d="M267 100L356 43L285 139L267 100Z" fill="#E5EBFB"/><path d="M190 94C163 106 150 126 159 141C174 167 216 136 195 122C178 111 145 138 140 159" stroke="#E8B678" strokeWidth="2" strokeLinecap="round" strokeDasharray="4 6"/></g><g className="sparkle-one" fill="#E8B678"><path d="M402 79L408 94L424 99L408 105L402 120L397 105L381 99L397 94L402 79Z"/><circle cx="137" cy="100" r="4"/></g><g fill="#9EB7FC"><path d="M105 259L109 269L120 273L109 277L105 287L101 277L91 273L101 269L105 259Z"/><circle cx="431" cy="258" r="5"/><circle cx="357" cy="326" r="3"/></g></svg><div className="art-caption"><span>IDEAS, READY FOR TAKEOFF</span><i/></div></div>}
