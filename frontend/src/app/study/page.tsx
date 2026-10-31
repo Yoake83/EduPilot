@@ -139,7 +139,7 @@ export default function StudyPage() {
   }
 
   const s = { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' };
-  const inputStyle = { width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #E5E0D5', fontSize: 13, outline: 'none', background: '#FAFAF8', boxSizing: 'border-box' as const };
+  const inputStyle = { width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #E2E5EC', fontSize: 13, outline: 'none', background: '#FAFAF8', boxSizing: 'border-box' as const };
 
   const SUGGESTIONS = [
     'Summarize the key concepts',
@@ -149,19 +149,19 @@ export default function StudyPage() {
   ];
 
   return (
-    <div style={{ ...s, background: '#F5F0E8', minHeight: '100vh' }}>
+    <div style={{ ...s, background: '#F7F5EF', minHeight: '100vh' }}>
       <Topbar title="Study Assistant" />
 
       <div style={{ display: 'flex', height: 'calc(100vh - 60px)' }}>
 
         {/* LEFT PANEL — Materials list */}
-        <div style={{ width: 280, minWidth: 280, background: '#fff', borderRight: '0.5px solid #E5E0D5', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ width: 280, minWidth: 280, background: '#fff', borderRight: '0.5px solid #E2E5EC', display: 'flex', flexDirection: 'column' }}>
           <div style={{ padding: '16px 16px 12px', borderBottom: '0.5px solid #F0EDE8' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-              <h2 style={{ fontSize: 13, fontWeight: 700, color: '#0A4A3C', margin: 0 }}>Study Materials</h2>
+              <h2 style={{ fontSize: 13, fontWeight: 700, color: '#315ED8', margin: 0 }}>Study Materials</h2>
               <button onClick={() => setShowUpload(!showUpload)} style={{
                 fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 20,
-                background: '#0A4A3C', color: '#F2B759', border: 'none', cursor: 'pointer',
+                background: '#315ED8', color: '#FFFFFF', border: 'none', cursor: 'pointer',
               }}>
                 + Upload
               </button>
@@ -182,19 +182,19 @@ export default function StudyPage() {
                 <input ref={fileInputRef} type="file" accept=".pdf"
                   onChange={e => setUploadFile(e.target.files?.[0] || null)} style={{ display: 'none' }} />
                 <div onClick={() => fileInputRef.current?.click()}
-                  style={{ border: '1.5px dashed #E5E0D5', borderRadius: 7, padding: '8px 10px', cursor: 'pointer', marginBottom: 8, textAlign: 'center' }}>
-                  <p style={{ fontSize: 11, color: uploadFile ? '#0A4A3C' : '#9CA3AF', margin: 0, fontWeight: uploadFile ? 600 : 400 }}>
+                  style={{ border: '1.5px dashed #E2E5EC', borderRadius: 7, padding: '8px 10px', cursor: 'pointer', marginBottom: 8, textAlign: 'center' }}>
+                  <p style={{ fontSize: 11, color: uploadFile ? '#315ED8' : '#9CA3AF', margin: 0, fontWeight: uploadFile ? 600 : 400 }}>
                     {uploadFile ? `📄 ${uploadFile.name}` : '📎 Click to choose PDF'}
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
                   <button type="submit" disabled={uploading || !uploadFile || !uploadTitle} style={{
-                    flex: 1, padding: '7px 0', borderRadius: 7, background: !uploadFile || !uploadTitle ? '#9CA3AF' : '#0A4A3C',
-                    color: '#F2B759', fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer',
+                    flex: 1, padding: '7px 0', borderRadius: 7, background: !uploadFile || !uploadTitle ? '#9CA3AF' : '#315ED8',
+                    color: '#FFFFFF', fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer',
                   }}>
                     {uploading ? 'Processing…' : 'Upload'}
                   </button>
-                  <button type="button" onClick={() => setShowUpload(false)} style={{ padding: '7px 10px', borderRadius: 7, background: '#fff', color: '#6B7280', fontSize: 12, border: '0.5px solid #E5E0D5', cursor: 'pointer' }}>
+                  <button type="button" onClick={() => setShowUpload(false)} style={{ padding: '7px 10px', borderRadius: 7, background: '#fff', color: '#6B7280', fontSize: 12, border: '0.5px solid #E2E5EC', cursor: 'pointer' }}>
                     Cancel
                   </button>
                 </div>
@@ -215,21 +215,21 @@ export default function StudyPage() {
                   onClick={() => handleSelectMaterial(m)}
                   style={{
                     padding: '10px 12px', borderRadius: 10, marginBottom: 4, cursor: 'pointer',
-                    background: selectedMaterial?._id === m._id ? 'rgba(10,74,60,0.08)' : 'transparent',
-                    border: `0.5px solid ${selectedMaterial?._id === m._id ? 'rgba(10,74,60,0.2)' : 'transparent'}`,
+                    background: selectedMaterial?._id === m._id ? 'rgba(49,94,216,0.08)' : 'transparent',
+                    border: `0.5px solid ${selectedMaterial?._id === m._id ? 'rgba(49,94,216,0.2)' : 'transparent'}`,
                     transition: 'background 0.15s',
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: 12, fontWeight: 600, color: selectedMaterial?._id === m._id ? '#0A4A3C' : '#111', margin: '0 0 2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <p style={{ fontSize: 12, fontWeight: 600, color: selectedMaterial?._id === m._id ? '#315ED8' : '#111', margin: '0 0 2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {m.title}
                       </p>
                       <p style={{ fontSize: 10, color: '#9CA3AF', margin: 0 }}>
                         {m.subject || m.fileName} · {m.totalChunks} sections
                       </p>
                       {m.uploaderRole === 'teacher' && (
-                        <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 10, background: 'rgba(10,74,60,0.08)', color: '#0A4A3C' }}>Teacher</span>
+                        <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 10, background: 'rgba(49,94,216,0.08)', color: '#315ED8' }}>Teacher</span>
                       )}
                     </div>
                     {m.uploadedBy === user?._id && (
@@ -249,22 +249,22 @@ export default function StudyPage() {
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           {!selectedMaterial ? (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, textAlign: 'center' }}>
-              <div style={{ width: 64, height: 64, borderRadius: 16, background: '#0A4A3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, marginBottom: 16 }}>
+              <div style={{ width: 64, height: 64, borderRadius: 16, background: '#315ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, marginBottom: 16 }}>
                 🧠
               </div>
-              <h2 style={{ fontSize: 18, fontWeight: 700, color: '#0A4A3C', margin: '0 0 8px' }}>AI Study Assistant</h2>
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: '#315ED8', margin: '0 0 8px' }}>AI Study Assistant</h2>
               <p style={{ fontSize: 13, color: '#6B7280', maxWidth: 360, lineHeight: 1.6, margin: '0 0 24px' }}>
                 Upload your notes or textbook PDFs, then ask questions. The AI will answer <strong>only from your material</strong> — like having a tutor who's read your notes.
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, maxWidth: 400 }}>
                 {['Upload lecture notes', 'Ask about any topic', 'Get summaries', 'Practice questions'].map(tip => (
-                  <div key={tip} style={{ padding: '10px 14px', background: '#fff', borderRadius: 10, border: '0.5px solid #E5E0D5', fontSize: 12, color: '#374151', fontWeight: 500 }}>
+                  <div key={tip} style={{ padding: '10px 14px', background: '#fff', borderRadius: 10, border: '0.5px solid #E2E5EC', fontSize: 12, color: '#374151', fontWeight: 500 }}>
                     ✓ {tip}
                   </div>
                 ))}
               </div>
               {materials.length === 0 && (
-                <button onClick={() => setShowUpload(true)} style={{ marginTop: 20, padding: '10px 24px', background: '#0A4A3C', color: '#F2B759', borderRadius: 999, fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                <button onClick={() => setShowUpload(true)} style={{ marginTop: 20, padding: '10px 24px', background: '#315ED8', color: '#FFFFFF', borderRadius: 999, fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
                   Upload Your First PDF
                 </button>
               )}
@@ -275,8 +275,8 @@ export default function StudyPage() {
           ) : (
             <>
               {/* Chat header */}
-              <div style={{ padding: '14px 20px', background: '#fff', borderBottom: '0.5px solid #E5E0D5', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(10,74,60,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📄</div>
+              <div style={{ padding: '14px 20px', background: '#fff', borderBottom: '0.5px solid #E2E5EC', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(49,94,216,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>📄</div>
                 <div>
                   <p style={{ fontSize: 13, fontWeight: 600, color: '#111', margin: 0 }}>{selectedMaterial.title}</p>
                   <p style={{ fontSize: 11, color: '#9CA3AF', margin: 0 }}>{selectedMaterial.totalChunks} sections indexed · Answers from your material only</p>
@@ -292,15 +292,15 @@ export default function StudyPage() {
                 {messages.map((msg, i) => (
                   <div key={i} style={{ marginBottom: 16, display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
                     {msg.role === 'assistant' && (
-                      <div style={{ width: 28, height: 28, borderRadius: 8, background: '#0A4A3C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, marginRight: 8, flexShrink: 0, alignSelf: 'flex-start', marginTop: 2 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: 8, background: '#315ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, marginRight: 8, flexShrink: 0, alignSelf: 'flex-start', marginTop: 2 }}>
                         🧠
                       </div>
                     )}
                     <div style={{
                       maxWidth: '75%', padding: '10px 14px', 
-                      background: msg.role === 'user' ? '#0A4A3C' : '#fff',
-                      color: msg.role === 'user' ? '#F2B759' : '#111',
-                      border: msg.role === 'assistant' ? '0.5px solid #E5E0D5' : 'none',
+                      background: msg.role === 'user' ? '#315ED8' : '#fff',
+                      color: msg.role === 'user' ? '#FFFFFF' : '#111',
+                      border: msg.role === 'assistant' ? '0.5px solid #E2E5EC' : 'none',
                       fontSize: 13, lineHeight: 1.6,
                       borderRadius: msg.role === 'user' ? '12px 12px 2px 12px' : '2px 12px 12px 12px',
                     }}>
@@ -321,7 +321,7 @@ export default function StudyPage() {
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
                     {SUGGESTIONS.map(s => (
                       <button key={s} onClick={() => { setInput(s); }}
-                        style={{ fontSize: 12, padding: '7px 14px', borderRadius: 20, background: '#fff', color: '#0A4A3C', border: '0.5px solid #E5E0D5', cursor: 'pointer', fontWeight: 500 }}>
+                        style={{ fontSize: 12, padding: '7px 14px', borderRadius: 20, background: '#fff', color: '#315ED8', border: '0.5px solid #E2E5EC', cursor: 'pointer', fontWeight: 500 }}>
                         {s}
                       </button>
                     ))}
@@ -332,8 +332,8 @@ export default function StudyPage() {
               </div>
 
               {/* Input */}
-              <div style={{ padding: '12px 20px', background: '#fff', borderTop: '0.5px solid #E5E0D5' }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end', background: '#F9F7F5', borderRadius: 12, padding: '8px 12px', border: '0.5px solid #E5E0D5' }}>
+              <div style={{ padding: '12px 20px', background: '#fff', borderTop: '0.5px solid #E2E5EC' }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end', background: '#F9F7F5', borderRadius: 12, padding: '8px 12px', border: '0.5px solid #E2E5EC' }}>
                   <textarea
                     value={input}
                     onChange={e => { setInput(e.target.value); e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px'; }}
@@ -343,9 +343,9 @@ export default function StudyPage() {
                     style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 13, color: '#111', resize: 'none', lineHeight: 1.5, maxHeight: 100, overflowY: 'auto' }}
                   />
                   <button onClick={handleAsk} disabled={!input.trim() || asking}
-                    style={{ width: 32, height: 32, borderRadius: 8, background: !input.trim() || asking ? '#E5E0D5' : '#0A4A3C', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    style={{ width: 32, height: 32, borderRadius: 8, background: !input.trim() || asking ? '#E2E5EC' : '#315ED8', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path d="M8 13V3M4 7l4-4 4 4" stroke={!input.trim() || asking ? '#9CA3AF' : '#F2B759'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M8 13V3M4 7l4-4 4 4" stroke={!input.trim() || asking ? '#9CA3AF' : '#FFFFFF'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
                 </div>
