@@ -1,5 +1,8 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import type { Server } from 'http';
+import jwt from 'jsonwebtoken';
+import type { AuthPayload } from '../middleware/auth.middleware';
+import { AssignmentModel } from '../models/Assignment';
 import type { WSMessage } from '../types';
 
 const rooms = new Map<string, Set<WebSocket>>();
@@ -10,10 +13,21 @@ let wss: WebSocketServer;
 export function initWebSocket(server: Server) {
   wss = new WebSocketServer({ server, path: '/ws' });
 
-  wss.on('connection', (ws, req) => {
+  wss.on('connection', async (ws, req) => {
     const url = new URL(req.url || '', 'http://localhost');
     const assignmentId = url.searchParams.get('assignmentId');
-    const userId = url.searchParams.get('userId');
+    let user: AuthPayload;
+    try {
+      user = jwt.verify(url.searchParams.get('token') || '', process.env.JWT_SECRET || '') as AuthPayload;
+      if (!user.userId) throw new Error('Invalid identity');
+      if (assignmentId) {
+        const assignment = await AssignmentModel.findById(assignmentId);
+        // Generation events contain answer keys: restrict them to educators.
+        if (!assignment || (user.role !== 'admin' && assignment.createdBy !== user.userId)) throw new Error('Forbidden');
+      }
+    } catch { ws.close(1008, 'Unauthorized'); return; }
+    if (ws.readyState !== WebSocket.OPEN) return;
+    const userId = user.userId;
 
     if (assignmentId) {
       if (!rooms.has(assignmentId)) rooms.set(assignmentId, new Set());
