@@ -15,8 +15,9 @@ export function AuthShell({ children, mode }: { children: React.ReactNode; mode:
    <div className="auth-story-footer"><span>Built around your potential.</span><span>LEARN. CREATE. SOAR. ↗</span></div>
   </section>
   <section className="auth-form-side"><div className="auth-topline"><span>{mode === 'login' ? 'New to EduPilot?' : 'Already a member?'}</span><Link href={mode === 'login' ? '/register' : '/login'}>{mode === 'login' ? 'Get started' : 'Sign in'} <span>↗</span></Link></div>
-   <div className="auth-form-content"><span className="auth-portal"><i/> YOUR EDUPILOT WORKSPACE</span><div className="mobile-auth-brand"><Brand /></div>{children}</div>
+   <div className="auth-form-content"><div className="mobile-auth-brand"><Brand /></div>{children}</div>
    <footer className="auth-form-footer"><span>© {new Date().getFullYear()} EduPilot</span><span>A space to grow, together.</span></footer>
   </section>
  </div>;
 }
+
