@@ -85,25 +85,7 @@ Every query is scoped at the controller level by role — teachers only see assi
 
 ---
 
-##  Screenshots
 
-| Teacher Dashboard | Student Dashboard |
-|---|---|
-| *[screenshot placeholder]* | *[screenshot placeholder]* |
-
-| AI Question Generator | RAG Study Assistant |
-|---|---|
-| *[screenshot placeholder]* | *[screenshot placeholder]* |
-
-| Analytics Dashboard | Discussion Forum |
-|---|---|
-| *[screenshot placeholder]* | *[screenshot placeholder]* |
-
-| AI Auto-Grading | Quiz Generator |
-|---|---|
-| *[screenshot placeholder]* | *[screenshot placeholder]* |
-
----
 
 ##  Key Engineering Decisions
 
