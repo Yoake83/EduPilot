@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { authHeaders } from '@/hooks/useApi';
+import { Topbar } from '@/components/Topbar';
+import { WorkspaceBanner } from '@/components/WorkspaceBanner';
 import { format } from 'date-fns';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -77,35 +79,22 @@ export default function AssignmentsPage() {
   const s = { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' };
 
   return (
-    <div style={{ ...s, minHeight: '100vh', background: '#F7F5EF' }}>
-      {/* Topbar */}
-      <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E2E5EC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', position: 'sticky', top: 0, zIndex: 30 }}>
-        <span style={{ fontSize: 13, color: '#9CA3AF' }}>Assignments</span>
-        {isTeacher && (
-          <Link href="/assignments/create" style={{ padding: '7px 16px', background: '#315ED8', color: '#FFFFFF', borderRadius: 999, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}>
-            + Create Assignment
-          </Link>
-        )}
-      </div>
-
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '28px 24px' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 4px' }}>Assignments</h1>
-        <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 20px' }}>
-          {isTeacher ? 'Manage and create assignments for your classes.' : 'Your assignments from all enrolled classes.'}
-        </p>
-
+    <div className="workspace-page" style={{ ...s, minHeight: '100vh', background: '#F7F5EF' }}>
+      <Topbar title="Assignments" action={isTeacher?{label:'+ Create assignment',href:'/assignments/create'}:undefined}/>
+      <div className="workspace-content">
+        <WorkspaceBanner eyebrow="ONE STEP AT A TIME" title={isTeacher?'Inspiration, put into practice.':'A little effort. A little further.'} description={isTeacher?'Bring your lessons to life. Create, share, and follow every student’s progress.':'Everything you’re working on, in one thoughtful place. You’ve got this.'} count={assignments.length} noun="assignments to explore"/>
         {/* Search + Filter bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+        <div className="assignment-toolbar">
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search assignments…"
-            style={{ flex: 1, padding: '9px 14px', borderRadius: 10, border: '0.5px solid #E2E5EC', fontSize: 13, outline: 'none', background: '#fff' }}
+            placeholder="Search assignmentsâ€¦"
+            style={{ flex: 1, padding: '9px 14px', borderRadius: 10, border: '0.5px solid #E2E5EC', fontSize: 14, outline: 'none', background: '#fff' }}
           />
           <div style={{ display: 'flex', gap: 6 }}>
             {['all', 'completed', 'pending', 'failed'].map(f => (
               <button key={f} onClick={() => setActiveFilter(f)} style={{
-                padding: '7px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600,
+                padding: '7px 14px', borderRadius: 20, fontSize: 14, fontWeight: 600,
                 border: '0.5px solid', cursor: 'pointer', textTransform: 'capitalize' as const,
                 background: activeFilter === f ? '#315ED8' : '#fff',
                 color: activeFilter === f ? '#FFFFFF' : '#6B7280',
@@ -124,28 +113,28 @@ export default function AssignmentsPage() {
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
           </div>
         ) : filtered.length === 0 ? (
-          <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '48px 24px', textAlign: 'center' }}>
-            <div style={{ fontSize: 40, marginBottom: 12 }}>📄</div>
+          <div className="workspace-empty">
+            <div style={{ fontSize: 40, marginBottom: 12 }}>ðŸ“„</div>
             <p style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: '0 0 6px' }}>
               {assignments.length === 0 ? 'No assignments yet' : 'No results found'}
             </p>
-            <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 20px' }}>
+            <p style={{ fontSize: 14, color: '#6B7280', margin: '0 0 20px' }}>
               {isTeacher
                 ? 'Create your first assignment to get started.'
                 : 'Join a class to see assignments here.'}
             </p>
             {isTeacher && (
-              <Link href="/assignments/create" style={{ display: 'inline-block', padding: '9px 20px', background: '#315ED8', color: '#FFFFFF', borderRadius: 999, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
+              <Link href="/assignments/create" style={{ display: 'inline-block', padding: '9px 20px', background: '#315ED8', color: '#FFFFFF', borderRadius: 999, fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
                 + Create Assignment
               </Link>
             )}
           </div>
         ) : (
-          <div ref={menuRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: 12 }}>
+          <div ref={menuRef} className="assignment-collection">
             {filtered.map((a) => {
               const sc = statusColors[a.status] || { bg: '#F3F4F6', color: '#6B7280' };
               return (
-                <div key={a._id} style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '18px 20px', position: 'relative' }}>
+                <div className="assignment-paper" key={a._id} style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '18px 20px', position: 'relative' }}>
                   {/* Title row */}
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
                     <p style={{ fontSize: 15, fontWeight: 700, color: '#111', margin: 0, flex: 1, paddingRight: 8, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -153,21 +142,22 @@ export default function AssignmentsPage() {
                     </p>
                     <div style={{ position: 'relative', flexShrink: 0 }}>
                       <button
-                        onMouseDown={e => { e.stopPropagation(); setMenuOpenId(menuOpenId === a._id ? null : a._id); }}
+                        onClick={e => { e.stopPropagation(); setMenuOpenId(menuOpenId === a._id ? null : a._id); }}
+                        aria-label={`Actions for ${a.title}`} aria-expanded={menuOpenId === a._id}
                         style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', fontSize: 20, padding: '0 4px', lineHeight: 1 }}
-                      >⋮</button>
+                      >â‹®</button>
                       {menuOpenId === a._id && (
                         <div style={{ position: 'absolute', right: 0, top: 28, background: '#fff', borderRadius: 12, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 160, overflow: 'hidden', border: '0.5px solid #E2E5EC' }}>
                           <button
-                            onMouseDown={e => { e.stopPropagation(); setMenuOpenId(null); router.push(`/assignments/${a._id}`); }}
-                            style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: 13, fontWeight: 500, color: '#111', background: 'none', border: 'none', cursor: 'pointer' }}
+                            onClick={e => { e.stopPropagation(); setMenuOpenId(null); router.push(`/assignments/${a._id}`); }}
+                            style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: 14, fontWeight: 500, color: '#111', background: 'none', border: 'none', cursor: 'pointer' }}
                           >View</button>
                           {isTeacher && (
                             <>
                               <div style={{ height: 1, background: '#F0EDE8', margin: '0 12px' }} />
                               <button
-                                onMouseDown={e => { e.stopPropagation(); router.push(`/assignments/review/${a._id}`); setMenuOpenId(null); }}
-                                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: 13, fontWeight: 500, color: '#315ED8', background: 'none', border: 'none', cursor: 'pointer' }}
+                                onClick={e => { e.stopPropagation(); router.push(`/assignments/review/${a._id}`); setMenuOpenId(null); }}
+                                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: 14, fontWeight: 500, color: '#315ED8', background: 'none', border: 'none', cursor: 'pointer' }}
                               >Submissions</button>
                             </>
                           )}
@@ -175,8 +165,8 @@ export default function AssignmentsPage() {
                             <>
                               <div style={{ height: 1, background: '#F0EDE8', margin: '0 12px' }} />
                               <button
-                                onMouseDown={e => { e.stopPropagation(); router.push(`/assignments/submit/${a._id}`); setMenuOpenId(null); }}
-                                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: 13, fontWeight: 500, color: '#315ED8', background: 'none', border: 'none', cursor: 'pointer' }}
+                                onClick={e => { e.stopPropagation(); router.push(`/assignments/submit/${a._id}`); setMenuOpenId(null); }}
+                                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: 14, fontWeight: 500, color: '#315ED8', background: 'none', border: 'none', cursor: 'pointer' }}
                               >Submit</button>
                             </>
                           )}
@@ -184,8 +174,8 @@ export default function AssignmentsPage() {
                             <>
                               <div style={{ height: 1, background: '#F0EDE8', margin: '0 12px' }} />
                               <button
-                                onMouseDown={e => { e.stopPropagation(); handleDelete(a._id); }}
-                                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: 13, fontWeight: 500, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer' }}
+                                onClick={e => { e.stopPropagation(); handleDelete(a._id); }}
+                                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', fontSize: 14, fontWeight: 500, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer' }}
                               >Delete</button>
                             </>
                           )}
@@ -196,21 +186,21 @@ export default function AssignmentsPage() {
 
                   {/* Group + subject */}
                   {a.groupId && (
-                    <p style={{ fontSize: 11, color: '#6B7280', margin: '0 0 10px' }}>
-                      📚 {a.groupId.name} · {a.subject}
+                    <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 10px' }}>
+                      ðŸ“š {a.groupId.name} Â· {a.subject}
                     </p>
                   )}
 
                   {/* Dates row */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ fontSize: 12, color: '#6B7280' }}>
+                    <div style={{ fontSize: 14, color: '#6B7280' }}>
                       <span style={{ fontWeight: 600, color: '#374151' }}>Assigned: </span>
                       {format(new Date(a.createdAt), 'dd MMM yyyy')}
-                      <span style={{ margin: '0 8px', color: '#E2E5EC' }}>·</span>
+                      <span style={{ margin: '0 8px', color: '#E2E5EC' }}>Â·</span>
                       <span style={{ fontWeight: 600, color: '#374151' }}>Due: </span>
                       {format(new Date(a.dueDate), 'dd MMM yyyy')}
                     </div>
-                    <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20, background: sc.bg, color: sc.color, textTransform: 'capitalize' as const }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, padding: '3px 8px', borderRadius: 20, background: sc.bg, color: sc.color, textTransform: 'capitalize' as const }}>
                       {a.status}
                     </span>
                   </div>

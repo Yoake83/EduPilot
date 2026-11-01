@@ -27,19 +27,19 @@ export default function LoginPage() {
       <div className="auth-form-card">
           <form onSubmit={handleSubmit}>
             {error && (
-              <div role="alert" style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
+              <div role="alert" style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', borderRadius: 8, padding: '10px 14px', fontSize: 14, marginBottom: 16 }}>
                 {error}
               </div>
             )}
             <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Email</label>
+              <label style={{ fontSize: 14, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Email</label>
               <input aria-label="Email" autoComplete="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com"
-                style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #E2E5EC', fontSize: 13, outline: 'none', boxSizing: 'border-box' as const, background: '#FAFAF8' }} />
+                style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #E2E5EC', fontSize: 14, outline: 'none', boxSizing: 'border-box' as const, background: '#FAFAF8' }} />
             </div>
             <div style={{ marginBottom: 20 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Password</label>
+              <label style={{ fontSize: 14, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Password</label>
               <input aria-label="Password" autoComplete="current-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••"
-                style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #E2E5EC', fontSize: 13, outline: 'none', boxSizing: 'border-box' as const, background: '#FAFAF8' }} />
+                style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #E2E5EC', fontSize: 14, outline: 'none', boxSizing: 'border-box' as const, background: '#FAFAF8' }} />
             </div>
             <button type="submit" disabled={isLoading} style={{
               width: '100%', padding: '11px 0', borderRadius: 10,
@@ -50,7 +50,7 @@ export default function LoginPage() {
               {isLoading ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
-          <p style={{ textAlign: 'center', fontSize: 13, color: '#6B7280', marginTop: 20, marginBottom: 0 }}>
+          <p style={{ textAlign: 'center', fontSize: 14, color: '#6B7280', marginTop: 20, marginBottom: 0 }}>
             Don&apos;t have an account?{' '}
             <Link href="/register" style={{ color: '#315ED8', fontWeight: 600, textDecoration: 'none' }}>Create one</Link>
           </p>

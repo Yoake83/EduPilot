@@ -7,6 +7,9 @@ import { useAssignmentStore } from '@/store/assignmentStore';
 import { authHeaders } from '@/hooks/useApi';
 
 import clsx from 'clsx';
+import { Topbar } from '@/components/Topbar';
+import { InteriorHero } from '@/components/InteriorHero';
+import './teacher.css';
 
 const QUESTION_TYPE_OPTIONS = [
   'Multiple Choice Questions',
@@ -93,25 +96,20 @@ function CreateAssignmentForm() {
   const totalMarks = form.questionTypes.reduce((s, qt) => s + (qt.count || 0) * (qt.marks || 0), 0);
 
   return (
-    <div className="min-h-full bg-[#F7F5EF]">
-      {/* Top bar */}
-      <div className="bg-white border-b border-[#E2E5EC] px-6 py-4 flex items-center gap-3">
-        <button onClick={() => router.back()} className="text-[#9CA3AF] hover:text-[#1A1A1A]">←</button>
-        <span className="text-sm text-[#9CA3AF]">Assignment</span>
-        {groupId && <span className="text-xs px-2 py-0.5 rounded-full bg-[#315ED8]/10 text-[#315ED8] font-medium">Linked to class</span>}
-      </div>
-
-      <div className="max-w-2xl mx-auto py-8 px-4">
-        <div className="bg-white rounded-2xl border border-[#E2E5EC] p-8">
-          <h1 className="text-lg font-semibold text-[#315ED8] mb-1">Create Assignment</h1>
-          <p className="text-xs text-[#9CA3AF] mb-6">Set up and create a new assignment for your students.</p>
-
+    <div className="teacher-create-page min-h-full bg-[#F7F5EF]">
+      <Topbar title="Create assignment"/>
+      <div className="teacher-studio-content"><InteriorHero eyebrow="YOUR NEXT GREAT LESSON" title="Start with an idea." accent="Make room for discovery." description="A thoughtful question can open a whole new world. Shape your paper, bring your materials, and let’s create something worth exploring." kind="ideas"/>
+      <div className="teacher-studio-layout"><aside className="assignment-plan"><span className="teacher-kicker">YOUR PAPER, AT A GLANCE</span><h2>A little structure.<br/>Endless possibility.</h2><div className="paper-preview" aria-hidden="true"><span>YOUR NEXT CHAPTER</span><strong>{form.title || 'Something inspiring.'}</strong><i/><i/><i/><div>01 <span>Let curiosity lead the way.</span></div></div><div className="plan-totals"><div><strong>{String(totalQuestions).padStart(2,'0')}</strong><span>Questions</span></div><div><strong>{String(totalMarks).padStart(2,'0')}</strong><span>Total marks</span></div></div><div className="plan-detail"><span>Subject</span><strong>{form.subject || 'A world to explore'}</strong></div><div className="plan-detail"><span>Class</span><strong>{form.grade || 'Your next learners'}</strong></div><div className="plan-detail"><span>Connection</span><strong>{groupId?'Linked to your class':'Personal paper'}</strong></div><p className="plan-note"><span>✦</span> A thoughtful first draft, ready for your expertise. Review the generated paper before sharing.</p></aside>
+        <div className="teacher-form-card"><div className="teacher-form-intro"><span className="teacher-kicker">LET’S PUT IT TOGETHER</span><h2>Create your assignment</h2><p>The right details make a good starting point.</p></div>
+          <div className="teacher-section-title"><span>01</span><div><h3>Bring your materials</h3><p>A syllabus or reference file can help guide the questions. This is optional.</p></div></div>
           {/* File upload */}
           <div
             className={clsx(
-              'border-2 border-dashed rounded-xl p-8 flex flex-col items-center gap-3 mb-6 cursor-pointer transition-colors',
+              'teacher-upload border-2 border-dashed rounded-xl p-8 flex flex-col items-center gap-3 mb-6 cursor-pointer transition-colors',
               dragOver ? 'border-[#315ED8] bg-[#315ED8]/10' : 'border-[#E2E5EC] hover:border-[#315ED8]/30'
             )}
+            role="button" tabIndex={0} aria-label="Choose reference material"
+            onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInputRef.current?.click();}}}
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={(e) => {
@@ -148,12 +146,13 @@ function CreateAssignmentForm() {
             )}
           </div>
 
+          <div className="teacher-section-title"><span>02</span><div><h3>Set the scene</h3><p>Give your assignment a name and choose who it’s for.</p></div></div>
           {/* Basic fields */}
           <div className="grid grid-cols-2 gap-4 mb-5">
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-[#6B7280] mb-1.5">Assignment Title</label>
+              <label className="block text-xs font-medium text-[#6B7280] mb-1.5" htmlFor="assignment-title">Assignment Title</label>
               <input
-                value={form.title}
+                id="assignment-title" value={form.title}
                 onChange={(e) => setForm({ title: e.target.value })}
                 placeholder="e.g. Quiz on Electricity"
                 className={clsx(
@@ -164,18 +163,18 @@ function CreateAssignmentForm() {
               {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#6B7280] mb-1.5">Subject</label>
+              <label className="block text-xs font-medium text-[#6B7280] mb-1.5" htmlFor="assignment-subject">Subject</label>
               <input
-                value={form.subject}
+                id="assignment-subject" value={form.subject}
                 onChange={(e) => setForm({ subject: e.target.value })}
                 placeholder="e.g. Science"
                 className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.subject ? 'border-red-400' : 'border-[#E2E5EC] focus:border-[#315ED8]')}
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#6B7280] mb-1.5">Grade / Class</label>
+              <label className="block text-xs font-medium text-[#6B7280] mb-1.5" htmlFor="assignment-grade">Grade / Class</label>
               <input
-                value={form.grade}
+                id="assignment-grade" value={form.grade}
                 onChange={(e) => setForm({ grade: e.target.value })}
                 placeholder="e.g. Grade 8"
                 className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.grade ? 'border-red-400' : 'border-[#E2E5EC] focus:border-[#315ED8]')}
@@ -185,18 +184,19 @@ function CreateAssignmentForm() {
 
           {/* Due date */}
           <div className="mb-5">
-            <label className="block text-xs font-medium text-[#6B7280] mb-1.5">Due Date</label>
+            <label className="block text-xs font-medium text-[#6B7280] mb-1.5" htmlFor="assignment-dueDate">Due Date</label>
             <input
               type="date"
-              value={form.dueDate}
+              id="assignment-dueDate" value={form.dueDate}
               onChange={(e) => setForm({ dueDate: e.target.value })}
               className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none', errors.dueDate ? 'border-red-400' : 'border-[#E2E5EC] focus:border-[#315ED8]')}
             />
           </div>
 
+          <div className="teacher-section-title"><span>03</span><div><h3>Find the right balance</h3><p>Mix question types and set the marks for each.</p></div></div>
           {/* Question types */}
           <div className="mb-5">
-            <div className="flex items-center justify-between mb-2">
+            <div className="teacher-question-labels">
               <label className="text-xs font-medium text-[#6B7280]">Question Type</label>
               <div className="grid grid-cols-2 gap-8 text-xs font-medium text-[#6B7280] mr-8">
                 <span>No. of Questions</span>
@@ -205,9 +205,9 @@ function CreateAssignmentForm() {
             </div>
             <div className="space-y-3">
               {form.questionTypes.map((qt, i) => (
-                <div key={qt.id} className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <select
+                <div key={qt.id} className="teacher-question-row">
+                  <div className="teacher-question-select">
+                    <select aria-label={`Question type ${i+1}`}
                       value={qt.type}
                       onChange={(e) => updateQuestionType(qt.id, { type: e.target.value })}
                       className={clsx('w-full px-3 py-2.5 border rounded-lg text-sm outline-none bg-white', errors[`qt_type_${i}`] ? 'border-red-400' : 'border-[#E2E5EC]')}
@@ -227,7 +227,7 @@ function CreateAssignmentForm() {
                     <button onClick={() => updateQuestionType(qt.id, { marks: qt.marks + 1 })} className="w-8 h-10 flex items-center justify-center text-[#6B7280] hover:bg-[#F9F9F9]">+</button>
                   </div>
                   {form.questionTypes.length > 1 && (
-                    <button onClick={() => removeQuestionType(qt.id)} className="text-[#9CA3AF] hover:text-red-400 text-lg">✕</button>
+                    <button onClick={() => removeQuestionType(qt.id)} aria-label="Remove question type" className="text-[#9CA3AF] hover:text-red-400 text-lg">✕</button>
                   )}
                 </div>
               ))}
@@ -244,13 +244,14 @@ function CreateAssignmentForm() {
             )}
           </div>
 
+          <div className="teacher-section-title"><span>04</span><div><h3>Add your perspective</h3><p>A little context helps make this paper your own.</p></div></div>
           {/* Additional instructions */}
           <div className="mb-6">
             <label className="block text-xs font-medium text-[#6B7280] mb-1.5">
               Additional Info <span className="font-normal">(Optional)</span>
             </label>
             <textarea
-              value={form.additionalInstructions}
+              aria-label="Additional instructions" value={form.additionalInstructions}
               onChange={(e) => setForm({ additionalInstructions: e.target.value })}
               placeholder="e.g. Cover chapters 1-3, focus on practical applications..."
               rows={3}
@@ -259,7 +260,7 @@ function CreateAssignmentForm() {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between">
+          <div className="teacher-form-actions">
             <button
               onClick={() => router.back()}
               className="flex items-center gap-2 px-5 py-2.5 border border-[#E2E5EC] rounded-full text-sm text-[#6B7280] hover:bg-[#F9F9F9]"
@@ -277,7 +278,7 @@ function CreateAssignmentForm() {
             </button>
           </div>
         </div>
-      </div>
+      </div></div>
     </div>
   );
 }

@@ -24,7 +24,7 @@ export default function RegisterPage() {
     if (ok) router.push('/home');
   }
 
-  const inputStyle = { width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #E2E5EC', fontSize: 13, outline: 'none', boxSizing: 'border-box' as const, background: '#FAFAF8' };
+  const inputStyle = { width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #E2E5EC', fontSize: 14, outline: 'none', boxSizing: 'border-box' as const, background: '#FAFAF8' };
 
   return (
     <AuthShell mode="register">
@@ -32,30 +32,30 @@ export default function RegisterPage() {
       <div className="auth-form-card">
           <form onSubmit={handleSubmit}>
             {error && (
-              <div role="alert" style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
+              <div role="alert" style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', borderRadius: 8, padding: '10px 14px', fontSize: 14, marginBottom: 16 }}>
                 {error}
               </div>
             )}
             <div style={{ marginBottom: 14 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Full name</label>
+              <label style={{ fontSize: 14, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Full name</label>
               <input aria-label="Full name" autoComplete="name" type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" style={inputStyle} />
             </div>
             <div style={{ marginBottom: 14 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Email</label>
+              <label style={{ fontSize: 14, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Email</label>
               <input aria-label="Email" autoComplete="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" style={inputStyle} />
             </div>
             <div style={{ marginBottom: 14 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Password</label>
+              <label style={{ fontSize: 14, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Password</label>
               <input aria-label="Password" autoComplete="new-password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min. 6 characters" style={inputStyle} />
             </div>
 
             {/* Role selector */}
             <div style={{ marginBottom: 14 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 8 }}>I am a…</label>
+              <label style={{ fontSize: 14, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 8 }}>I am a…</label>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 {(['student', 'teacher'] as UserRole[]).map((r) => (
                   <button key={r} type="button" onClick={() => setRole(r)} style={{
-                    padding: '9px 0', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                    padding: '9px 0', borderRadius: 8, fontSize: 14, fontWeight: 600,
                     cursor: 'pointer', border: '1.5px solid', textTransform: 'capitalize',
                     background: role === r ? '#315ED8' : '#fff',
                     color: role === r ? '#FFFFFF' : '#6B7280',
@@ -68,7 +68,7 @@ export default function RegisterPage() {
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 14, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>
                 Department <span style={{ fontWeight: 400, color: '#9CA3AF' }}>(optional)</span>
               </label>
               <input aria-label="Department" type="text" value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="e.g. Computer Science" style={inputStyle} />
@@ -83,7 +83,7 @@ export default function RegisterPage() {
               {isLoading ? 'Creating account…' : 'Create account'}
             </button>
           </form>
-          <p style={{ textAlign: 'center', fontSize: 13, color: '#6B7280', marginTop: 20, marginBottom: 0 }}>
+          <p style={{ textAlign: 'center', fontSize: 14, color: '#6B7280', marginTop: 20, marginBottom: 0 }}>
             Already have an account?{' '}
             <Link href="/login" style={{ color: '#315ED8', fontWeight: 600, textDecoration: 'none' }}>Sign in</Link>
           </p>

@@ -46,7 +46,7 @@ export function NotificationBell() {
             position: 'absolute', top: 0, right: 0,
             width: 16, height: 16, borderRadius: '50%',
             background: '#315ED8', color: '#fff',
-            fontSize: 9, fontWeight: 700,
+            fontSize: 12, fontWeight: 700,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             {unreadCount > 9 ? '9+' : unreadCount}
@@ -64,11 +64,11 @@ export function NotificationBell() {
         }}>
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '0.5px solid #F0EDE8' }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#315ED8' }}>
-              Notifications {unreadCount > 0 && <span style={{ fontSize: 11, color: '#315ED8' }}>({unreadCount} new)</span>}
+            <span style={{ fontSize: 14, fontWeight: 700, color: '#315ED8' }}>
+              Notifications {unreadCount > 0 && <span style={{ fontSize: 13, color: '#315ED8' }}>({unreadCount} new)</span>}
             </span>
             {unreadCount > 0 && (
-              <button onClick={markAllRead} style={{ fontSize: 11, color: '#6B7280', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
+              <button onClick={markAllRead} style={{ fontSize: 13, color: '#6B7280', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
                 Mark all read
               </button>
             )}
@@ -79,7 +79,7 @@ export function NotificationBell() {
             {notifications.length === 0 ? (
               <div style={{ padding: '32px 16px', textAlign: 'center' }}>
                 <div style={{ fontSize: 28, marginBottom: 8 }}>🔔</div>
-                <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>No notifications yet</p>
+                <p style={{ fontSize: 14, color: '#9CA3AF', margin: 0 }}>No notifications yet</p>
               </div>
             ) : (
               notifications.map((n) => (
@@ -103,9 +103,9 @@ export function NotificationBell() {
                 >
                   <span style={{ fontSize: 18, flexShrink: 0 }}>{typeIcon[n.type] || '🔔'}</span>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 12, fontWeight: 600, color: '#111', margin: '0 0 2px' }}>{n.title}</p>
-                    <p style={{ fontSize: 11, color: '#6B7280', margin: '0 0 4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.message}</p>
-                    <p style={{ fontSize: 10, color: '#9CA3AF', margin: 0 }}>
+                    <p style={{ fontSize: 14, fontWeight: 600, color: '#111', margin: '0 0 2px' }}>{n.title}</p>
+                    <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.message}</p>
+                    <p style={{ fontSize: 12, color: '#9CA3AF', margin: 0 }}>
                       {new Date(n.createdAt).toLocaleDateString()} · {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>

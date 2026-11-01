@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { authHeaders } from '@/hooks/useApi';
 import { Topbar } from '@/components/Topbar';
+import { InteriorHero } from '@/components/InteriorHero';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -15,9 +16,9 @@ function BarChart({ data, color = '#315ED8' }: { data: { label: string; value: n
     <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 120, padding: '0 4px' }}>
       {data.map((d, i) => (
         <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, height: '100%', justifyContent: 'flex-end' }}>
-          <span style={{ fontSize: 10, color: '#6B7280', fontWeight: 600 }}>{d.value > 0 ? d.value : ''}</span>
-          <div style={{ width: '100%', background: color, borderRadius: '4px 4px 0 0', height: `${(d.value / max) * 85}%`, minHeight: d.value > 0 ? 4 : 0, opacity: 0.85 }} />
-          <span style={{ fontSize: 10, color: '#9CA3AF', textAlign: 'center', lineHeight: 1.2 }}>{d.label}</span>
+          <span style={{ fontSize: 12, color: '#6B7280', fontWeight: 600 }}>{d.value > 0 ? d.value : ''}</span>
+          <div className="growing-bar" style={{ width: '100%', background: color, borderRadius: '4px 4px 0 0', height: `${(d.value / max) * 85}%`, minHeight: d.value > 0 ? 4 : 0, opacity: 0.85 }} />
+          <span style={{ fontSize: 12, color: '#9CA3AF', textAlign: 'center', lineHeight: 1.2 }}>{d.label}</span>
         </div>
       ))}
     </div>
@@ -30,8 +31,8 @@ function HBar({ label, value, max, color = '#315ED8', suffix = '%' }: { label: s
   return (
     <div style={{ marginBottom: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-        <span style={{ fontSize: 12, color: '#374151', fontWeight: 500 }}>{label}</span>
-        <span style={{ fontSize: 12, color, fontWeight: 700 }}>{value}{suffix}</span>
+        <span style={{ fontSize: 14, color: '#374151', fontWeight: 500 }}>{label}</span>
+        <span style={{ fontSize: 14, color, fontWeight: 700 }}>{value}{suffix}</span>
       </div>
       <div style={{ height: 8, background: '#F7F5EF', borderRadius: 999, overflow: 'hidden' }}>
         <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: 999, transition: 'width 0.6s ease' }} />
@@ -43,7 +44,7 @@ function HBar({ label, value, max, color = '#315ED8', suffix = '%' }: { label: s
 // ── Donut chart ────────────────────────────────────────────────────────────────
 function DonutChart({ data }: { data: { label: string; value: number; color: string }[] }) {
   const total = data.reduce((s, d) => s + d.value, 0);
-  if (total === 0) return <div style={{ textAlign: 'center', padding: 24, color: '#9CA3AF', fontSize: 13 }}>No data yet</div>;
+  if (total === 0) return <div style={{ textAlign: 'center', padding: 24, color: '#9CA3AF', fontSize: 14 }}>No data yet</div>;
 
   let offset = 0;
   const r = 50, cx = 60, cy = 60, circ = 2 * Math.PI * r;
@@ -75,7 +76,7 @@ function DonutChart({ data }: { data: { label: string; value: number; color: str
         {data.map((d, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <div style={{ width: 10, height: 10, borderRadius: 3, background: d.color, flexShrink: 0 }} />
-            <span style={{ fontSize: 11, color: '#374151' }}>{d.label}: <strong>{d.value}</strong></span>
+            <span style={{ fontSize: 13, color: '#374151' }}>{d.label}: <strong>{d.value}</strong></span>
           </div>
         ))}
       </div>
@@ -86,10 +87,10 @@ function DonutChart({ data }: { data: { label: string; value: number; color: str
 // ── Stat card ─────────────────────────────────────────────────────────────────
 function StatCard({ label, value, sub, color = '#315ED8' }: { label: string; value: string | number; sub?: string; color?: string }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 12, padding: '16px 18px', border: '0.5px solid #E2E5EC' }}>
-      <p style={{ fontSize: 11, color: '#9CA3AF', margin: '0 0 6px', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{label}</p>
+    <div className="insight-stat">
+      <p style={{ fontSize: 13, color: '#9CA3AF', margin: '0 0 6px', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{label}</p>
       <p style={{ fontSize: 26, fontWeight: 700, color, margin: '0 0 2px' }}>{value ?? '—'}</p>
-      {sub && <p style={{ fontSize: 11, color: '#A36D1A', margin: 0, fontWeight: 600 }}>{sub}</p>}
+      {sub && <p style={{ fontSize: 13, color: '#A36D1A', margin: 0, fontWeight: 600 }}>{sub}</p>}
     </div>
   );
 }
@@ -97,8 +98,8 @@ function StatCard({ label, value, sub, color = '#315ED8' }: { label: string; val
 // ── Section wrapper ───────────────────────────────────────────────────────────
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '20px 24px', marginBottom: 16 }}>
-      <h2 style={{ fontSize: 14, fontWeight: 700, color: '#315ED8', margin: '0 0 18px' }}>{title}</h2>
+    <div className="insight-section">
+      <h2 className="insight-section-title">{title}</h2>
       {children}
     </div>
   );
@@ -126,14 +127,14 @@ function TeacherAnalytics() {
   return (
     <>
       {/* Overview stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 16 }}>
+      <div className="insight-stats four-stats">
         <StatCard label="Total Groups" value={overview.totalGroups} sub="active classes" />
         <StatCard label="Total Students" value={overview.totalStudents} sub="across all groups" />
         <StatCard label="Assignments" value={overview.totalAssignments} sub={`${overview.totalSubmissions} submissions`} />
         <StatCard label="Avg Grade" value={overview.overallAvgGrade !== null ? `${overview.overallAvgGrade}%` : '—'} sub={`${overview.submissionRate}% submission rate`} color="#A36D1A" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="insight-chart-grid">
         {/* Submissions over time */}
         <Section title="📈 Submissions This Week">
           <BarChart
@@ -157,7 +158,7 @@ function TeacherAnalytics() {
       {/* Submission rate per assignment */}
       <Section title="📄 Assignment Submission Rates">
         {submissionsByAssignment.length === 0 ? (
-          <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>No assignments yet</p>
+          <p style={{ fontSize: 14, color: '#9CA3AF', margin: 0 }}>No assignments yet</p>
         ) : (
           submissionsByAssignment.map((a: any) => (
             <HBar key={a._id} label={a.title} value={a.submissionRate} max={100} color={a.submissionRate >= 75 ? '#059669' : a.submissionRate >= 50 ? '#A36D1A' : '#DC2626'} />
@@ -168,7 +169,7 @@ function TeacherAnalytics() {
       {/* Per group stats */}
       <Section title="👥 Class Performance">
         {groupStats.length === 0 ? (
-          <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>No classes yet</p>
+          <p style={{ fontSize: 14, color: '#9CA3AF', margin: 0 }}>No classes yet</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {groupStats.map((g: any) => (
@@ -178,14 +179,14 @@ function TeacherAnalytics() {
                     <span style={{ fontSize: 14 }}>📚</span>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: 13, fontWeight: 600, color: '#111', margin: 0 }}>{g.name}</p>
-                    <p style={{ fontSize: 11, color: '#6B7280', margin: '2px 0 0' }}>{g.subject} · {g.students} students · {g.assignments} assignments</p>
+                    <p style={{ fontSize: 14, fontWeight: 600, color: '#111', margin: 0 }}>{g.name}</p>
+                    <p style={{ fontSize: 13, color: '#6B7280', margin: '2px 0 0' }}>{g.subject} · {g.students} students · {g.assignments} assignments</p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <p style={{ fontSize: 14, fontWeight: 700, color: g.avgGrade !== null ? '#315ED8' : '#9CA3AF', margin: 0 }}>
                       {g.avgGrade !== null ? `${g.avgGrade}%` : '—'}
                     </p>
-                    <p style={{ fontSize: 10, color: '#9CA3AF', margin: '2px 0 0' }}>avg grade</p>
+                    <p style={{ fontSize: 12, color: '#9CA3AF', margin: '2px 0 0' }}>avg grade</p>
                   </div>
                 </div>
               </Link>
@@ -223,13 +224,13 @@ function StudentAnalytics() {
   return (
     <>
       {/* Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
+      <div className="insight-stats">
         <StatCard label="Enrolled Classes" value={overview.enrolledClasses} sub="active groups" />
         <StatCard label="Assignments" value={overview.totalAssignments} sub={`${overview.submitted} submitted`} />
         <StatCard label="Avg Grade" value={overview.avgGrade !== null ? `${overview.avgGrade}%` : '—'} sub={`${overview.graded} graded`} color="#A36D1A" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="insight-chart-grid">
         {/* Submission status donut */}
         <Section title="📊 Submission Status">
           <DonutChart data={[
@@ -242,7 +243,7 @@ function StudentAnalytics() {
         {/* Grade trend */}
         <Section title="📈 Grade Trend">
           {gradeTrend.length === 0 ? (
-            <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>No graded submissions yet</p>
+            <p style={{ fontSize: 14, color: '#9CA3AF', margin: 0 }}>No graded submissions yet</p>
           ) : (
             <BarChart
               data={gradeTrend.map((d: any) => ({ label: d.label, value: d.percentage }))}
@@ -255,14 +256,14 @@ function StudentAnalytics() {
       {/* Assignment performance */}
       <Section title="📄 Assignment Performance">
         {assignmentPerformance.length === 0 ? (
-          <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>No assignments yet</p>
+          <p style={{ fontSize: 14, color: '#9CA3AF', margin: 0 }}>No assignments yet</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {assignmentPerformance.map((a: any, i: number) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#F9F7F5', borderRadius: 10, border: '0.5px solid #E2E5EC' }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 13, fontWeight: 600, color: '#111', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.title}</p>
-                  <p style={{ fontSize: 11, color: '#6B7280', margin: '2px 0 0' }}>{a.subject} · Due {new Date(a.dueDate).toLocaleDateString()}</p>
+                  <p style={{ fontSize: 14, fontWeight: 600, color: '#111', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.title}</p>
+                  <p style={{ fontSize: 13, color: '#6B7280', margin: '2px 0 0' }}>{a.subject} · Due {new Date(a.dueDate).toLocaleDateString()}</p>
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
                   {a.percentage !== null ? (
@@ -270,7 +271,7 @@ function StudentAnalytics() {
                       {a.percentage}%
                     </p>
                   ) : (
-                    <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 20, background: '#FEF2F2', color: statusColors[a.status] || '#9CA3AF' }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, padding: '2px 8px', borderRadius: 20, background: '#FEF2F2', color: statusColors[a.status] || '#9CA3AF' }}>
                       {a.status.replace('_', ' ')}
                     </span>
                   )}
@@ -292,13 +293,8 @@ export default function AnalyticsPage() {
   return (
     <div style={{ background: '#F7F5EF', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
       <Topbar title="Analytics" />
-      <div style={{ maxWidth: 960, margin: '0 auto', padding: '28px 24px' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 4px' }}>
-          {isTeacher ? '📊 Teaching Analytics' : '📊 My Progress'}
-        </h1>
-        <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 24px' }}>
-          {isTeacher ? 'Track class performance, submission rates and grade distribution.' : 'Track your submissions, grades and performance over time.'}
-        </p>
+      <div className="interior-content analytics-content">
+        <InteriorHero eyebrow={isTeacher?'A CLEARER VIEW OF YOUR CLASSROOM':'YOUR LEARNING, IN PERSPECTIVE'} title={isTeacher?'See the progress.':'Every little step'} accent={isTeacher?'Find the possibility.':'adds up.'} description={isTeacher?'Behind every number is a student moving forward. Explore the patterns, celebrate the progress, and find room to grow.':'Your effort has a story to tell. Follow your assignments, discover your progress, and keep moving forward.'} kind="insights"/>
         {isTeacher ? <TeacherAnalytics /> : <StudentAnalytics />}
       </div>
     </div>

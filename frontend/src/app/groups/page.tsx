@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { authHeaders } from '@/hooks/useApi';
+import { WorkspaceBanner } from '@/components/WorkspaceBanner';
 import { Topbar } from '@/components/Topbar';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -31,76 +32,11 @@ export default function GroupsPage() {
       .catch(() => setLoading(false));
   }, [mounted]);
 
-  const s = { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' };
-
-  return (
-    <div style={{ ...s, background: '#F7F5EF', minHeight: '100vh' }}>
-      <Topbar
-        title={isTeacher ? 'My Classes' : 'Enrolled Classes'}
-        action={{
-          label: isTeacher ? '+ Create Group' : '+ Join Class',
-          href: isTeacher ? '/groups/create' : '/groups/join',
-        }}
-      />
-
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '28px 24px' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 4px' }}>
-          {isTeacher ? 'My Classes' : 'Enrolled Classes'}
-        </h1>
-        <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 24px' }}>
-          {isTeacher ? 'Manage your classes and students.' : 'All classes you have joined.'}
-        </p>
-
-        {loading ? (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 0' }}>
-            <div style={{ width: 28, height: 28, border: '3px solid #315ED8', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-            <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-          </div>
-        ) : groups.length === 0 ? (
-          <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '48px 24px', textAlign: 'center' }}>
-            <div style={{ fontSize: 40, marginBottom: 12 }}>📚</div>
-            <p style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: '0 0 6px' }}>
-              {isTeacher ? 'No classes yet' : 'No classes joined yet'}
-            </p>
-            <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 20px' }}>
-              {isTeacher ? 'Create your first class to get started.' : 'Enter a join code to enroll in a class.'}
-            </p>
-            <Link href={isTeacher ? '/groups/create' : '/groups/join'} style={{
-              display: 'inline-block', padding: '9px 20px', background: '#315ED8',
-              color: '#FFFFFF', borderRadius: 999, fontSize: 13, fontWeight: 700, textDecoration: 'none',
-            }}>
-              {isTeacher ? '+ Create Class' : '+ Join Class'}
-            </Link>
-          </div>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
-            {groups.map((g) => (
-              <Link key={g._id} href={`/groups/${g._id}`} style={{ textDecoration: 'none' }}>
-                <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #E2E5EC', padding: '18px 20px', cursor: 'pointer' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: 10, background: '#315ED8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ fontSize: 18 }}>📚</span>
-                    </div>
-                    {isTeacher && (
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 8, background: 'rgba(49,94,216,0.15)', color: '#92651a', letterSpacing: '0.5px' }}>
-                        {g.joinCode}
-                      </span>
-                    )}
-                  </div>
-                  <p style={{ fontSize: 15, fontWeight: 700, color: '#111', margin: '0 0 3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{g.name}</p>
-                  <p style={{ fontSize: 12, color: '#6B7280', margin: '0 0 12px' }}>{g.subject}</p>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 10, borderTop: '0.5px solid #F0EDE8' }}>
-                    <span style={{ fontSize: 12, color: '#6B7280' }}>
-                      {isTeacher ? `${g.students.length} students` : `by ${g.teacherName}`}
-                    </span>
-                    <span style={{ fontSize: 12, color: '#315ED8', fontWeight: 600 }}>View →</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return <div className="workspace-page"><Topbar title={isTeacher ? 'My classes' : 'Enrolled classes'} action={{label:isTeacher?'+ Create class':'+ Join class',href:isTeacher?'/groups/create':'/groups/join'}}/>
+   <div className="workspace-content">
+    <WorkspaceBanner eyebrow="A PLACE TO BELONG" title={isTeacher?'Small classrooms. Big possibilities.':'Good things happen together.'} description={isTeacher?'Make space for questions, connections, and the next great idea.':'Your classes, your people, your next big discovery. Pick up where you left off.'} count={groups.length} noun={groups.length===1?'class in your world':'classes in your world'} action={{href:isTeacher?'/groups/create':'/groups/join',label:isTeacher?'Build a new classroom':'Have a class code? Join a class'}}/>
+    <div className="workspace-list-heading"><h2>{isTeacher?'Your classrooms':'Your learning spaces'} <span>{groups.length}</span></h2><p>Make yourself at home.</p></div>
+    {loading?<div className="class-collection" aria-label="Loading classes">{[0,1,2].map(i=><div className="class-placeholder" key={i}/>)}</div>:groups.length===0?<div className="workspace-empty"><span className="empty-drawing" aria-hidden="true">◫</span><h2>A fresh start, together.</h2><p>{isTeacher?'Your first classroom is the beginning of something great.':'Ask your teacher for a class code. Your next chapter is waiting.'}</p><Link className="button button-primary" href={isTeacher?'/groups/create':'/groups/join'}>{isTeacher?'Create your first class':'Join your first class'} <span aria-hidden="true">↗</span></Link></div>:<div className="class-collection">{groups.map((g,i)=><Link key={g._id} href={`/groups/${g._id}`} className={`learning-space space-${i%4}`} style={{animationDelay:`${Math.min(i,5)*60}ms`}}><div className="space-cover"><span className="space-subject">{g.subject}</span><div className="space-art" aria-hidden="true"><i/><i/><i/><b>✳</b></div><span className="space-index">CLASS / {String(i+1).padStart(2,'0')}</span></div><div className="space-body"><h3>{g.name}</h3>{g.description&&<p className="space-description">{g.description}</p>}<div className="space-person"><span>{(g.teacherName||'T').slice(0,1)}</span><p>{isTeacher?`${g.students.length} students learning`:`With ${g.teacherName}`}</p></div><div className="space-bottom"><span>{isTeacher?`Code · ${g.joinCode}`:'Your next discovery is inside'}</span><span className="space-open" aria-label="Open class">↗</span></div></div></Link>)}</div>}
+    <div className="workspace-tip"><span aria-hidden="true">✦</span><p><strong>A little connection goes a long way.</strong> Share ideas, ask questions, and learn something new together.</p></div>
+   </div></div>;
 }

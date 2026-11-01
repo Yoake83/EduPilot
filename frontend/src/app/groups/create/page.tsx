@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Topbar } from '@/components/Topbar';
 import { useAuth } from '@/hooks/useAuth';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -39,56 +40,20 @@ export default function CreateGroupPage() {
 
   const inputStyle = {
     width: '100%', padding: '10px 12px', borderRadius: 8,
-    border: '1px solid #E2E5EC', fontSize: 13, outline: 'none',
+    border: '1px solid #E2E5EC', fontSize: 14, outline: 'none',
     background: '#FAFAF8', boxSizing: 'border-box' as const,
   };
 
-  return (
-    <div style={{ background: '#F7F5EF', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
-      <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E2E5EC', display: 'flex', alignItems: 'center', padding: '0 24px', gap: 12 }}>
-        <Link href="/groups" style={{ fontSize: 13, color: '#6B7280', textDecoration: 'none' }}>← Groups</Link>
-        <span style={{ fontSize: 13, color: '#E2E5EC' }}>/</span>
-        <span style={{ fontSize: 13, color: '#111' }}>Create Class</span>
-      </div>
-
-      <div style={{ maxWidth: 500, margin: '48px auto', padding: '0 24px' }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 4px' }}>Create a Class</h1>
-        <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 28px' }}>Students will join using the code generated automatically.</p>
-
-        <div style={{ background: '#fff', borderRadius: 16, border: '0.5px solid #E2E5EC', padding: 28 }}>
-          <form onSubmit={handleSubmit}>
-            {error && (
-              <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
-                {error}
-              </div>
-            )}
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Class Name</label>
-              <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Grade 10 — Physics" style={inputStyle} />
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>Subject</label>
-              <input value={subject} onChange={e => setSubject(e.target.value)} placeholder="e.g. Physics" style={inputStyle} />
-            </div>
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>
-                Description <span style={{ fontWeight: 400, color: '#9CA3AF' }}>(optional)</span>
-              </label>
-              <textarea value={description} onChange={e => setDescription(e.target.value)}
-                placeholder="Brief description of this class…" rows={3}
-                style={{ ...inputStyle, resize: 'none' }} />
-            </div>
-            <button type="submit" disabled={loading} style={{
-              width: '100%', padding: '11px 0', borderRadius: 10,
-              background: loading ? '#9CA3AF' : '#315ED8',
-              color: '#FFFFFF', fontSize: 14, fontWeight: 700,
-              border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
-            }}>
-              {loading ? 'Creating…' : 'Create Class'}
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="workspace-page"><Topbar title="Create a classroom"/>
+   <div className="workspace-content"><Link className="teacher-back" href="/groups">← Back to your classes</Link><div className="class-builder">
+    <section className="class-builder-story"><span className="workspace-eyebrow">GREAT THINGS START HERE</span><h1>A space for<br/><em>bright minds.</em></h1><p>Give your students a place to ask, discover, and grow together.</p><div className="builder-book" aria-hidden="true"><span>◫</span><i>✳</i></div><ol><li><span>01</span><div><strong>Make it yours</strong><p>A name, a subject, a little personality.</p></div></li><li><span>02</span><div><strong>Bring everyone together</strong><p>Share your unique class code with students.</p></div></li><li><span>03</span><div><strong>Let the learning begin</strong><p>Post assignments and start a conversation.</p></div></li></ol></section>
+    <section className="class-builder-form"><span className="workspace-eyebrow">YOUR NEW CLASSROOM</span><h2>Set the scene.</h2><p>The best learning starts with a sense of belonging.</p><form onSubmit={handleSubmit}>
+     {error&&<div className="dashboard-error" role="alert">{error}</div>}
+     <label htmlFor="class-name">Class name <span>Required</span></label><input id="class-name" value={name} onChange={e=>setName(e.target.value)} required placeholder="e.g. Grade 10 — Physics"/>
+     <label htmlFor="class-subject">Subject <span>Required</span></label><input id="class-subject" value={subject} onChange={e=>setSubject(e.target.value)} required placeholder="e.g. Physics"/>
+     <label htmlFor="class-description">A little about this class <span>Optional</span></label><textarea id="class-description" value={description} onChange={e=>setDescription(e.target.value)} rows={4} placeholder="What will your students discover here?"/>
+     <div className="builder-code-note"><span aria-hidden="true">↗</span><p>A unique join code will be created automatically. Share it when you’re ready.</p></div>
+     <button className="button button-primary" type="submit" disabled={loading}>{loading?'Creating your classroom…':'Create classroom'} <span aria-hidden="true">↗</span></button>
+    </form></section>
+   </div></div></div>;
 }

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Brand } from './Brand';
 import './auth.css';
 export function AuthShell({ children, mode }: { children: React.ReactNode; mode: 'login' | 'register' }) {
- return <div className="auth-experience">
+ return <div className="auth-background"><div className="auth-experience">
   <section className="auth-story" aria-label="Welcome to EduPilot">
    <Link href="/login" className="auth-brand-link"><Brand /></Link>
    <div className="auth-story-copy"><span className="auth-kicker"><i/> YOUR POTENTIAL, READY FOR TAKEOFF</span><h1>A brighter way<br/>to learn.<br/><em>A little more you.</em></h1><p>Bring your curiosity. Build your next big idea.<br/>One thoughtful space for learning and teaching.</p></div>
@@ -18,6 +18,6 @@ export function AuthShell({ children, mode }: { children: React.ReactNode; mode:
    <div className="auth-form-content"><div className="mobile-auth-brand"><Brand /></div>{children}</div>
    <footer className="auth-form-footer"><span>© {new Date().getFullYear()} EduPilot</span><span>A space to grow, together.</span></footer>
   </section>
- </div>;
+ </div></div>;
 }
 

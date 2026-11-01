@@ -38,27 +38,27 @@ export default function JoinGroupPage() {
   return (
     <div style={{ background: '#F7F5EF', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
       <div style={{ height: 60, background: '#fff', borderBottom: '0.5px solid #E2E5EC', display: 'flex', alignItems: 'center', padding: '0 24px', gap: 12 }}>
-        <Link href="/groups" style={{ fontSize: 13, color: '#6B7280', textDecoration: 'none' }}>← Groups</Link>
-        <span style={{ fontSize: 13, color: '#E2E5EC' }}>/</span>
-        <span style={{ fontSize: 13, color: '#111' }}>Join Class</span>
+        <Link href="/groups" style={{ fontSize: 14, color: '#6B7280', textDecoration: 'none' }}>← Groups</Link>
+        <span style={{ fontSize: 14, color: '#E2E5EC' }}>/</span>
+        <span style={{ fontSize: 14, color: '#111' }}>Join Class</span>
       </div>
 
       <div style={{ maxWidth: 440, margin: '64px auto', padding: '0 24px' }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🎓</div>
-          <h1 style={{ fontSize: 20, fontWeight: 700, color: '#315ED8', margin: '0 0 6px' }}>Join a Class</h1>
-          <p style={{ fontSize: 13, color: '#6B7280', margin: 0 }}>Ask your teacher for the class code and enter it below.</p>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#315ED8', margin: '0 0 6px' }}>Join a Class</h1>
+          <p style={{ fontSize: 14, color: '#6B7280', margin: 0 }}>Ask your teacher for the class code and enter it below.</p>
         </div>
 
         <div style={{ background: '#fff', borderRadius: 16, border: '0.5px solid #E2E5EC', padding: 28 }}>
           <form onSubmit={handleJoin}>
             {error && (
-              <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
+              <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', borderRadius: 8, padding: '10px 14px', fontSize: 14, marginBottom: 16 }}>
                 {error}
               </div>
             )}
             <div style={{ marginBottom: 20 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 8 }}>Class Code</label>
+              <label style={{ fontSize: 14, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 8 }}>Class Code</label>
               <input
                 value={code}
                 onChange={e => setCode(e.target.value.toUpperCase())}
@@ -71,7 +71,7 @@ export default function JoinGroupPage() {
                   background: '#FAFAF8', color: '#315ED8', boxSizing: 'border-box' as const,
                 }}
               />
-              <p style={{ fontSize: 11, color: '#9CA3AF', textAlign: 'center', margin: '6px 0 0' }}>6-character code from your teacher</p>
+              <p style={{ fontSize: 13, color: '#9CA3AF', textAlign: 'center', margin: '6px 0 0' }}>6-character code from your teacher</p>
             </div>
             <button type="submit" disabled={loading || code.length < 6} style={{
               width: '100%', padding: '11px 0', borderRadius: 10,
